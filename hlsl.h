@@ -42,6 +42,13 @@ struct float2
     float2() = default;
     float2(float x, float y) :x(x), y(y) {}
     float x, y;
+
+    float2& operator*=(float2 rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        return *this;
+    }
 };
 
 float2 min(float2 a, float2 b)
@@ -144,6 +151,14 @@ float saturate(float v)
     return v;
 }
 
+float2 saturate(float2 v)
+{
+    float2 res = v;
+    res.x = saturate(res.x);
+    res.y = saturate(res.y);
+    return res;
+}
+
 float4 saturate(float4 v)
 {
     float4 res = v;
@@ -164,12 +179,45 @@ float dot(float3 a, float3 b)
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+float2 operator-(float2 a, float2 b)
+{
+    float2 res = a;
+    res.x -= b.x;
+    res.y -= b.y;
+    return res;
+}
+
 float3 operator-(float3 a, float3 b)
 {
     float3 res = a;
     res.x -= b.x;
     res.y -= b.y;
     res.z -= b.z;
+    return res;
+}
+
+float2 operator*(float2 v, float s)
+{
+    float2 res = v;
+    res.x *= s;
+    res.y *= s;
+    return res;
+}
+
+float2 operator*(float2 a, float2 b)
+{
+    float2 res = a;
+    res.x *= b.x;
+    res.y *= b.y;
+    return res;
+}
+
+
+float2 operator/(float2 a, float2 b)
+{
+    float2 res = a;
+    res.x /= b.x;
+    res.y /= b.y;
     return res;
 }
 
@@ -188,6 +236,14 @@ float3 operator*(float s, float3 v)
     res.x *= s;
     res.y *= s;
     res.z *= s;
+    return res;
+}
+
+float2 operator+(float2 a, float2 b)
+{
+    float2 res = a;
+    res.x += b.x;
+    res.y += b.y;
     return res;
 }
 
@@ -267,6 +323,14 @@ struct uint2
     }
 };
 
+uint2 operator*(uint2 a, uint2 b)
+{
+    uint2 res = a;
+    res.x *= b.x;
+    res.y *= b.y;
+    return res;
+}
+
 uint2 operator|=(uint2 a, uint2 b)
 {
     uint2 res = a;
@@ -318,6 +382,17 @@ struct uint4
     }
 };
 
+uint4 operator&(uint s, uint4 rhs)
+{
+    uint4 res = uint4(s, s, s, s);
+    res.x &= rhs.x;
+    res.y &= rhs.y;
+    res.z &= rhs.z;
+    res.w &= rhs.w;
+
+    return res;
+}
+
 uint4 operator<<(uint4 a, uint4 b)
 {
     uint4 res = a;
@@ -325,6 +400,14 @@ uint4 operator<<(uint4 a, uint4 b)
     res.y <<= b.y;
     res.z <<= b.z;
     res.w <<= b.w;
+    return res;
+}
+
+uint2 operator<<(uint2 a, uint2 b)
+{
+    uint2 res = a;
+    res.x <<= b.x;
+    res.y <<= b.y;
     return res;
 }
 
