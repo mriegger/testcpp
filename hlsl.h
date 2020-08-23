@@ -18,7 +18,7 @@ T clamp(T val, T minVal, T maxVal)
     return val;
 }
 
-int firstbitlow(uint32_t x)
+inline int firstbitlow(uint32_t x)
 {
     int res = 0;
     while (x)
@@ -32,7 +32,7 @@ int firstbitlow(uint32_t x)
     return -1;
 }
 
-float step(float y, float x)
+inline float step(float y, float x)
 {
     return (x >= y) ? 1.0f : 0.0f;
 }
@@ -51,7 +51,15 @@ struct float2
     }
 };
 
-float2 min(float2 a, float2 b)
+inline float2 floor(const float2 v)
+{
+    float2 result;
+    result.x = floor(v.x);
+    result.y = floor(v.y);
+    return result;
+}
+
+inline float2 min(float2 a, float2 b)
 {
     using namespace std;
 
@@ -61,7 +69,7 @@ float2 min(float2 a, float2 b)
     return res;
 }
 
-float2 max(float2 a, float2 b)
+inline float2 max(float2 a, float2 b)
 {
     using namespace std;
 
@@ -89,7 +97,7 @@ struct float3
     }
 };
 
-float3 operator/(float f, float3 v)
+inline float3 operator/(float f, float3 v)
 {
     float3 res = float3(f, f, f);
     res.x /= v.x;
@@ -144,14 +152,14 @@ struct float4
     }
 };
 
-float saturate(float v)
+inline float saturate(float v)
 {
     if (v < 0) return 0;
     if (v > 1) return 1;
     return v;
 }
 
-float2 saturate(float2 v)
+inline float2 saturate(float2 v)
 {
     float2 res = v;
     res.x = saturate(res.x);
@@ -159,7 +167,7 @@ float2 saturate(float2 v)
     return res;
 }
 
-float4 saturate(float4 v)
+inline float4 saturate(float4 v)
 {
     float4 res = v;
     res.x = saturate(res.x);
@@ -169,17 +177,17 @@ float4 saturate(float4 v)
     return res;
 }
 
-float rsqrt(float f)
+inline float rsqrt(float f)
 {
     return 1.0f / sqrt(f);
 }
 
-float dot(float3 a, float3 b)
+inline float dot(float3 a, float3 b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-float2 operator-(float2 a, float2 b)
+inline float2 operator-(float2 a, float2 b)
 {
     float2 res = a;
     res.x -= b.x;
@@ -187,7 +195,7 @@ float2 operator-(float2 a, float2 b)
     return res;
 }
 
-float3 operator-(float3 a, float3 b)
+inline float3 operator-(float3 a, float3 b)
 {
     float3 res = a;
     res.x -= b.x;
@@ -196,7 +204,7 @@ float3 operator-(float3 a, float3 b)
     return res;
 }
 
-float2 operator*(float2 v, float s)
+inline float2 operator*(float2 v, float s)
 {
     float2 res = v;
     res.x *= s;
@@ -204,7 +212,7 @@ float2 operator*(float2 v, float s)
     return res;
 }
 
-float2 operator*(float2 a, float2 b)
+inline float2 operator*(float2 a, float2 b)
 {
     float2 res = a;
     res.x *= b.x;
@@ -213,7 +221,7 @@ float2 operator*(float2 a, float2 b)
 }
 
 
-float2 operator/(float2 a, float2 b)
+inline float2 operator/(float2 a, float2 b)
 {
     float2 res = a;
     res.x /= b.x;
@@ -221,7 +229,7 @@ float2 operator/(float2 a, float2 b)
     return res;
 }
 
-float3 operator*(float3 v, float s)
+inline float3 operator*(float3 v, float s)
 {
     float3 res = v;
     res.x *= s;
@@ -230,7 +238,7 @@ float3 operator*(float3 v, float s)
     return res;
 }
 
-float3 operator*(float s, float3 v)
+inline float3 operator*(float s, float3 v)
 {
     float3 res = v;
     res.x *= s;
@@ -239,7 +247,7 @@ float3 operator*(float s, float3 v)
     return res;
 }
 
-float2 operator+(float2 a, float2 b)
+inline float2 operator+(float2 a, float2 b)
 {
     float2 res = a;
     res.x += b.x;
@@ -247,7 +255,7 @@ float2 operator+(float2 a, float2 b)
     return res;
 }
 
-float3 operator+(float3 a, float3 b)
+inline float3 operator+(float3 a, float3 b)
 {
     float3 res = a;
     res.x += b.x;
@@ -256,7 +264,7 @@ float3 operator+(float3 a, float3 b)
     return res;
 }
 
-float4 operator+(float4 v, float f)
+inline float4 operator+(float4 v, float f)
 {
     float4 res = v;
     res.x += f;
@@ -266,7 +274,7 @@ float4 operator+(float4 v, float f)
     return res;
 }
 
-float4 operator/(float f, float4 v)
+inline float4 operator/(float f, float4 v)
 {
     float4 res = float4(f, f, f, f);
     res.x /= v.x;
@@ -276,7 +284,7 @@ float4 operator/(float f, float4 v)
     return res;
 }
 
-float4 operator*(float4 v, float f)
+inline float4 operator*(float4 v, float f)
 {
     float4 res = v;
     res.x *= f;
@@ -286,7 +294,7 @@ float4 operator*(float4 v, float f)
     return res;
 }
 
-float4 step(float4 a, float4 b)
+inline float4 step(float4 a, float4 b)
 {
     float4 res;
     res.x = step(a.x, b.x);
@@ -296,7 +304,7 @@ float4 step(float4 a, float4 b)
     return res;
 }
 
-float4 max(float4 a, float4 b)
+inline float4 max(float4 a, float4 b)
 {
     using namespace std;
     float4 res;
@@ -307,7 +315,7 @@ float4 max(float4 a, float4 b)
     return res;
 }
 
-float4 step(float4 a, float f)
+inline float4 step(float4 a, float f)
 {
     float4 b = float4(f, f, f, f);
     return step(a, b);
@@ -323,7 +331,7 @@ struct uint2
     }
 };
 
-uint2 operator*(uint2 a, uint2 b)
+inline uint2 operator*(uint2 a, uint2 b)
 {
     uint2 res = a;
     res.x *= b.x;
@@ -331,7 +339,7 @@ uint2 operator*(uint2 a, uint2 b)
     return res;
 }
 
-uint2 operator|=(uint2 a, uint2 b)
+inline uint2 operator|=(uint2 a, uint2 b)
 {
     uint2 res = a;
     res.x |= b.x;
@@ -382,7 +390,7 @@ struct uint4
     }
 };
 
-uint4 operator&(uint s, uint4 rhs)
+inline uint4 operator&(uint s, uint4 rhs)
 {
     uint4 res = uint4(s, s, s, s);
     res.x &= rhs.x;
@@ -393,7 +401,7 @@ uint4 operator&(uint s, uint4 rhs)
     return res;
 }
 
-uint4 operator<<(uint4 a, uint4 b)
+inline uint4 operator<<(uint4 a, uint4 b)
 {
     uint4 res = a;
     res.x <<= b.x;
@@ -403,7 +411,7 @@ uint4 operator<<(uint4 a, uint4 b)
     return res;
 }
 
-uint2 operator<<(uint2 a, uint2 b)
+inline uint2 operator<<(uint2 a, uint2 b)
 {
     uint2 res = a;
     res.x <<= b.x;
@@ -416,7 +424,7 @@ struct bool4
     bool x, y, z, w;
 };
 
-bool4 operator<(bool4 a, bool4 b)
+inline bool4 operator<(bool4 a, bool4 b)
 {
     bool4 res;
     res.x = a.x < b.x;
@@ -426,7 +434,7 @@ bool4 operator<(bool4 a, bool4 b)
     return res;
 }
 
-bool4 operator!(bool4 b)
+inline bool4 operator!(bool4 b)
 {
     bool4 res;
     res.x = !b.x;
@@ -437,7 +445,7 @@ bool4 operator!(bool4 b)
     return res;
 }
 
-bool4 operator<(float4 a, float4 b)
+inline bool4 operator<(float4 a, float4 b)
 {
     bool4 res;
     res.x = a.x < b.x;
@@ -447,7 +455,7 @@ bool4 operator<(float4 a, float4 b)
     return res;
 }
 
-bool4 operator>(float4 a, float4 b)
+inline bool4 operator>(float4 a, float4 b)
 {
     bool4 res;
     res.x = a.x > b.x;
@@ -457,19 +465,19 @@ bool4 operator>(float4 a, float4 b)
     return res;
 }
 
-bool4 operator<(float4 a, float f)
+inline bool4 operator<(float4 a, float f)
 {
     float4 b = float4(f, f, f, f);
     return a < b;
 }
 
-bool4 operator>(float4 a, float f)
+inline bool4 operator>(float4 a, float f)
 {
     float4 b = float4(f, f, f, f);
     return a > b;
 }
 
-float asfloat(uint u)
+inline float asfloat(uint u)
 {
     union Convert
     {
@@ -481,7 +489,7 @@ float asfloat(uint u)
     return convert.f;
 }
 
-uint asuint(float f)
+inline uint asuint(float f)
 {
     union Convert
     {

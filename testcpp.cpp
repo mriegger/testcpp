@@ -6,9 +6,12 @@
 #include <iostream>
 #include <cassert>
 #include <map>
+#include <type_traits>
 #include <vector>
 #include <array>
+#include <unordered_set>
 #include "hlsl.h"
+#include "TextureSampling.h"
 
 using namespace std;
 
@@ -28,30 +31,17 @@ void MarkLightAsVisibleInSharedMemory(uint lightIndex, uint base)
 
 struct S
 {
-    S()
+    unordered_set<string> us;
+
+    unordered_set<string> GetSet()
     {
-        cout << "ctor" << endl;
-    }
-    ~S()
-    {
-        cout << "dtor" << endl;
+        return us;
     }
 
-    S(const S& rhs)
+    unordered_set<string>& GetConstRef()
     {
-        cout << "copy ctor" << endl;
+        return us;
     }
-
-    S& operator=(const S& rhs)
-    {
-        cout << "copy assignment" << endl;
-    }
-  
-    void PrintAddress()const
-    {
-        cout << (size_t)(this) << endl;
-    }
-
 };
 
 struct S2
@@ -349,6 +339,9 @@ void Reduction()
 
 int main()
 {
-    Reduction();
+    TextureSampling ts(float2(2,2));
+    float res = ts.BilinearSampleReference(float2(0.5, 0.5));
+    assert(res == 2.5);
+
     return 0;
 }

@@ -148,9 +148,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="testcpp.cpp" />
+    <ClCompile Include="TextureSampling.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h" />
+    <ClInclude Include="TextureSampling.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
