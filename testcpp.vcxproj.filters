@@ -29,5 +29,8 @@
     <ClInclude Include="TextureSampling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContiguousLinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

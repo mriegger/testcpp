@@ -151,6 +151,7 @@
     <ClCompile Include="TextureSampling.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="TextureSampling.h" />
   </ItemGroup>
