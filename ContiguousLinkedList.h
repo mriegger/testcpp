@@ -23,14 +23,20 @@ public:
 	{
 		return m_used;
 	}
+	
+	size_t capacity()const {
+		return m_capacity;
+	}
 
 	T& operator[](size_t position)
 	{
+		assert(position < capacity());
 		return m_data[position].m_value;
 	}
 
 	const T& operator[](size_t position) const 
 	{
+		assert(position < capacity());
 		return m_data[position].m_value;
 	}
 
@@ -59,6 +65,7 @@ public:
 
 	void Remove(int positionToRemove)
 	{
+		assert(positionToRemove < capacity() && positionToRemove >= 0);
 		m_used--;
 		if (m_usedHead == positionToRemove)
 		{
