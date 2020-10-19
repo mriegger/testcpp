@@ -12,6 +12,7 @@
 #include <unordered_set>
 #include "hlsl.h"
 #include "TextureSampling.h"
+#include "AtomicInstructions.h"
 
 using namespace std;
 
@@ -268,80 +269,81 @@ uint Regs_ConvertToMask(float4 d, float a, float b)
     return mask.x;
 }
 
-
-
-void Reduction()
+struct DefaultIbl
 {
-    cb_perFrame.fFarDepth = 0;// 0.00389951840f;
-    cb_perFrame.fHalfTileDimMulPixelUnproject = 0.00962120388f;
-    cb_perFrame.fLogMaxBins = 3; // 2^3 = 8 bins
-    cb_perFrame.fNormBulbRadius = 0.0626223087f;
-    cb_perFrame.fRangeThreshold = 1.05467284f;
-    cb_perFrame.uiGridW = 101;
-    cb_perFrame.uiGroupsMinusOne = 3;
-    cb_perFrame.uiLastSlice = 255;
-    cb_perFrame.uiMaxLightsPerBin = 256;
-    cb_perFrame.vFrustum = float4(1.94348323f, -1.09260499f, -0.971741617f, 0.546302497f);
-    cb_perFrame.vGridHalfPixel = float2(0.00497512426f, 0.00884955749f);
-    cb_perFrame.vGridPixel = float2(0.00995024852f, 0.0176991150f);
-    cb_perFrame.vInvGbSize = float2(0.000621890533f, 0.00110619469f);
-    cb_perFrame.vUnprojectZ = float2(0.125000000f, -0.000000000f);
-    cb_perFrame.vUnprojectZ_internal = float2(0.125000000f, -0.000000000f);
-
-    float4 do1 = float4(0.00001f, 0.2f, 0.3f, 0.9f);
-
-    float3 minmaxd = Regs_FindMinMaxMaxnoinf(do1);
-    float3 minmaxz = Depth_to_Z(minmaxd, cb_perFrame.vUnprojectZ);
-
-
-
-    float tileZ = minmaxz.z - minmaxz.x;
-    float A = 1.0 / tileZ;
-    float B = -minmaxz.x * A;
-
-    uint maskOpaque = Regs_ConvertToMask(do1, A, B);
-
-    //===============================================================================================
-    // NOTE: Mask
-
- //   Shared_MergeMasks(S_MASK_OPAQUE, maskOpaque);
-
-    //===============================================================================================
-    // NOTE: Output
-
-    if (true/*gl_LocalInvocationIndex == 0*/)
+    int* m_fp = nullptr;
+    DefaultIbl()
     {
-    //    maskOpaque = shared_mem[S_MASK_OPAQUE];
-
-
-        // NOTE: calculate number of bins
-
-        float ratio = tileZ / cb_perFrame.fRangeThreshold;
-        float logMaxBins = clamp(log2(ratio), 0.0f, cb_perFrame.fLogMaxBins);
-
-        // FIXME: verify - minmaxz.x > minmaxz.w ? "sky" : "ground"?
-
-        sTileData data;
-        data.zNear = minmaxz.x;
-        data.zFar_scattering = minmaxz.y;
-        data.zFar = minmaxz.z;
-        data.mask = maskOpaque;
-        data.logMaxBins = (uint)(logMaxBins + 0.5);
-
-        int x = 5;
-        (void)x;
-    //    uint4 pack = Tile_PackData(data);
-
-  //      uav_TileData[int2(gl_WorkGroupID.xy)] = pack;
+        cout << "ctor" << endl;
     }
+    DefaultIbl(const DefaultIbl& rhs) {
+        cout << "copy ctor" << endl;
+    };
+    DefaultIbl& operator=(const DefaultIbl& rhs)
+    {
+        cout << "copy assignment" << endl;
+        m_fp = rhs.m_fp;
+        return *this;
+    }
+    ~DefaultIbl()
+    {
+        cout << "~dtor" << endl;
+        if (m_fp)
+        {
+            std::cout << "releasing" << std::endl;
+            m_fp = nullptr;
+        }
+    }
+};
+
+
+#define THREADS_Y 256
+
+int mad(int a, int b, int c)
+{
+    return a * b + c;
 }
 
+
+
+#define THREADS_X 2     // Must be at least  2 or shader will produce errors
+#define THREADS_Y 64    // Must be at least 16 or shader will produce errors
+
+#define LDS_WIDTH (THREADS_X)
+
+int GetLdsIndex(uint2 index)
+{
+    return mad(index.y, LDS_WIDTH, index.x);
+}
+#define LDS_SIZE 512
+
+class Flatland
+{
+public:
+    auto operator <=> (const Flatland&) const = default;
+    int x;
+    int y;
+private:
+    int z;
+};
+
+struct Point2D
+{
+    auto operator <=> (const Point2D&) const = default;
+    float x, y;
+};
 
 int main()
 {
-    TextureSampling ts(float2(2,2));
-    float res = ts.BilinearSampleReference(float2(0.5, 0.5));
-    assert(res == 2.5);
 
-    return 0;
-}
+    vector<Point2D> v = { {1,0},{0,1},{0,0},{-1,0} ,{0,-1}, {5,6},{-56,3} };
+
+    sort(v.begin(), v.end());
+
+    for (const auto& elem : v)
+    {
+        cout << elem.x << " " << elem.y << endl;
+    }
+    
+};
+

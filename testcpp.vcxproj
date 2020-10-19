@@ -149,10 +149,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AtomicInstructions.cpp" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AtomicInstructions.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="TextureSampling.h" />

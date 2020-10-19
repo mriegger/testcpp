@@ -21,6 +21,9 @@
     <ClCompile Include="TextureSampling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AtomicInstructions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContiguousLinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AtomicInstructions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

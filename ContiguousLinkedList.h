@@ -24,7 +24,8 @@ public:
 		return m_used;
 	}
 	
-	size_t capacity()const {
+	size_t capacity() const 
+	{
 		return m_capacity;
 	}
 
