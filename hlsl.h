@@ -97,6 +97,11 @@ struct float3
     }
 };
 
+inline float dot(float3 a, float3 b)
+{
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
 inline float3 operator/(float f, float3 v)
 {
     float3 res = float3(f, f, f);
@@ -104,6 +109,21 @@ inline float3 operator/(float f, float3 v)
     res.y /= v.y;
     res.z /= v.z;
     return res;
+}
+
+inline float length(const float3 v)
+{
+    return sqrtf(dot(v,v));
+}
+
+inline float3 normalize(const float3 v)
+{
+    const float l = length(v);
+    float3 r = v;
+    r.x /= l;
+    r.y /= l;
+    r.z /= l;
+    return r;
 }
 
 struct float4
@@ -180,11 +200,6 @@ inline float4 saturate(float4 v)
 inline float rsqrt(float f)
 {
     return 1.0f / sqrt(f);
-}
-
-inline float dot(float3 a, float3 b)
-{
-    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 inline float2 operator-(float2 a, float2 b)
