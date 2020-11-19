@@ -6,12 +6,18 @@
 #include <iostream>
 #include <cassert>
 #include <map>
+#include <mutex>
 #include <type_traits>
+#include <thread>
 #include <vector>
+#include <functional>
 #include <array>
+#include <semaphore>
 #include <unordered_set>
+#include <atomic>
 #include "hlsl.h"
 #include "TextureSampling.h"
+#include "DiningPhilosophers.h"
 #include "AtomicInstructions.h"
 
 using namespace std;
@@ -333,17 +339,159 @@ struct Point2D
     float x, y;
 };
 
+struct RayRayIntersectOutput
+{
+    float t0;
+    float t1;
+    bool intersects = false;
+};
+
+RayRayIntersectOutput RayRayIntersect(float3 o0, float3 o1, float3 r0, float3 r1)
+{
+    RayRayIntersectOutput o;
+
+    r0 = normalize(r0);
+    r1 = normalize(r1);
+
+    float r0_dot_r1 = dot(r0, r1);
+    float3 a = o0 - o1;
+    float a_dot_r0 = dot(a, r0);
+    float a_dot_r1 = dot(a, r1);
+
+    float denom0 = (a_dot_r1 * r0_dot_r1 - a_dot_r0);
+
+    if (fabs(denom0) > 0.001)
+    {
+        float t0 = (1 - r0_dot_r1 * r0_dot_r1) / denom0;
+        o.t0 = t0;
+    }
+    o.intersects = o.t0 >= 0;
+    return o;
+}
+
+class Solution {
+
+    int m_result = 0;
+    bool m_roundsPerfectly = false;
+
+    bool divideByDoubling(unsigned int dividend, unsigned divisor)
+    {
+        if (dividend == 0)
+        {
+            m_roundsPerfectly = true;
+            return true;
+        }
+        if (divisor > dividend)return false;
+        unsigned int count = 1;
+        auto currSubtractValue = divisor;
+        while (currSubtractValue < (UINT_MAX >> 1) && currSubtractValue + currSubtractValue <= dividend)
+        {
+            currSubtractValue += currSubtractValue;
+            count += count;
+        }
+        m_result += count;
+        dividend -= currSubtractValue;
+        return divideByDoubling(dividend, divisor);
+    }
+
+    int sign(int x)
+    {
+        if (x == 0)return 0;
+        return x < 0 ? -1 : 1;
+    }
+
+public:
+    int divide(int dividend, int divisor)
+    {
+        int numLessZero = dividend < 0 ? 1 : 0;
+        numLessZero += divisor < 0 ? 1 : 0;
+
+        if (dividend == INT_MIN && abs(divisor) == 1)
+        {
+            if (numLessZero == 1)
+            {
+                return INT_MIN;
+            }
+            else
+            {
+                return INT_MAX;
+            }
+        }
+
+
+        unsigned int a = dividend != INT_MIN ? abs(dividend) : -INT_MAX;
+        unsigned int b = divisor != INT_MIN ? abs(divisor) : -INT_MAX;
+
+
+        divideByDoubling(a, b);
+        auto res = numLessZero == 1 ? -m_result : m_result;
+        if (m_roundsPerfectly == false && numLessZero == 1)
+        {
+            res--;
+        }
+
+        return res;
+    }
+};
+
+vector<mutex> forks;
+atomic<uint64_t> numPlatesEaten;
+
+void philo(int id)
+{
+    chrono::milliseconds dur(20);
+    while (true)
+    {
+        {
+            int leftId = id;
+            int rightId = (id + 1) % 5;
+
+
+            if (id == 4)
+            {
+                swap(leftId, rightId);
+            }
+
+            forks[leftId].lock();
+            this_thread::sleep_for(dur); //Leads to deadlock immediately
+
+
+            forks[rightId].lock();
+            numPlatesEaten++;
+            cout << "philo" << id << "is eating" << endl;
+
+
+            chrono::milliseconds dur2(rand() % 200 + 100);
+            this_thread::sleep_for(dur2);
+
+
+            forks[rightId].unlock();
+            forks[leftId].unlock();
+        }
+
+    }
+}
+
 int main()
 {
+    DiningPhilosophers dp;
+    dp.Run();
+   
 
-    vector<Point2D> v = { {1,0},{0,1},{0,0},{-1,0} ,{0,-1}, {5,6},{-56,3} };
+    vector<mutex> m(5);
+    forks.swap(m);
+    thread zero(philo,0);
+    thread one(philo, 1);
+    thread two(philo, 2);
+    thread three(philo, 3);
+    thread four(philo, 4);
 
-    sort(v.begin(), v.end());
-
-    for (const auto& elem : v)
+    while (true)
     {
-        cout << elem.x << " " << elem.y << endl;
+        if ((numPlatesEaten % 1) == 0)
+            cout << numPlatesEaten << endl;
     }
-    
+
+    return 0;
 };
 

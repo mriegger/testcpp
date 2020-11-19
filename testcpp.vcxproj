@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="AtomicInstructions.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
+    <ClInclude Include="DiningPhilosophers.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="TextureSampling.h" />
   </ItemGroup>
