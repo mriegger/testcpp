@@ -19,6 +19,7 @@ private:
 	void TestResult();
 
 	static const int NumThreads = 1000;
+	static const int NumNumbersToInsert = 1000;
 
 	std::vector<std::thread> m_threads;
 	AsyncLinkedList m_asyncLinkedList;

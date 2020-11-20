@@ -4,7 +4,8 @@
 
 void AsyncLinkedListTester::ThreadFunc(const int id)
 {
-	m_asyncLinkedList.Insert(id);
+	for(int i = 0 ; i < NumNumbersToInsert ; ++i)
+		m_asyncLinkedList.Insert(id * NumThreads + i);
 }
 
 void AsyncLinkedListTester::Run()
@@ -34,8 +35,8 @@ void AsyncLinkedListTester::TestResult()
 {
 	auto results = m_asyncLinkedList.GetLinkedListContents();
 	std::sort(results.begin(), results.end());
-	assert(results.size() == NumThreads);
-	for (int i = 0; i < results.size(); ++i)
+	assert(results.size() == NumThreads * NumNumbersToInsert);
+	for (int i = 0; i < NumThreads * NumNumbersToInsert; ++i)
 	{
 		assert(i == results[i]);
 	}
