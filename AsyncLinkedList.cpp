@@ -23,11 +23,21 @@ AsyncLinkedList::~AsyncLinkedList()
 
 void AsyncLinkedList::Insert(const int value)
 {
-	std::lock_guard<std::mutex> lck(m_mutex);
+//	std::lock_guard<std::mutex> lck(m_mutex);
+
+	int expected = 0;
+	int desired = 1;
+	while (!m_atomic.compare_exchange_strong(expected, desired))
+	{
+		expected = 0;
+	}
+
 	Node* newNode = new Node();
 	newNode->m_value = value;
 	newNode->m_next = m_head;
 	m_head = newNode;
+
+	m_atomic.store(0);
 }
 
 void AsyncLinkedList::PrintLinkedList()
