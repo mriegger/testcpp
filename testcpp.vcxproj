@@ -149,11 +149,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AsyncLinkedList.cpp" />
+    <ClCompile Include="AsyncLinkedListTester.cpp" />
     <ClCompile Include="AtomicInstructions.cpp" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AsyncLinkedList.h" />
+    <ClInclude Include="AsyncLinkedListTester.h" />
     <ClInclude Include="AtomicInstructions.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="DiningPhilosophers.h" />

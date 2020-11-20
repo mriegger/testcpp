@@ -18,6 +18,7 @@
 #include "hlsl.h"
 #include "TextureSampling.h"
 #include "DiningPhilosophers.h"
+#include "AsyncLinkedListTester.h"
 #include "AtomicInstructions.h"
 
 using namespace std;
@@ -474,24 +475,8 @@ void philo(int id)
 
 int main()
 {
-    DiningPhilosophers dp;
-    dp.Run();
-   
-
-    vector<mutex> m(5);
-    forks.swap(m);
-    thread zero(philo,0);
-    thread one(philo, 1);
-    thread two(philo, 2);
-    thread three(philo, 3);
-    thread four(philo, 4);
-
-    while (true)
-    {
-        if ((numPlatesEaten % 1) == 0)
-            cout << numPlatesEaten << endl;
-    }
-
+    AsyncLinkedListTester tester;
+    tester.Run();
     return 0;
 };
 
