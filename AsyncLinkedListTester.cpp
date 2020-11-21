@@ -10,9 +10,15 @@ void AsyncLinkedListTester::ThreadFunc(const int id)
 
 void AsyncLinkedListTester::Run()
 {
-	SpawnThreads();
-	JoinThreads();
-	TestResult();
+	int numIter = 0;
+	while (true)
+	{
+		SpawnThreads();
+		JoinThreads();
+		TestResult();
+		std::cout << "Completed " << ++numIter << std::endl;
+		m_asyncLinkedList.Clear();
+	}
 }
 
 void AsyncLinkedListTester::SpawnThreads()
@@ -29,6 +35,7 @@ void AsyncLinkedListTester::JoinThreads()
 	{
 		elem.join();
 	}
+	m_threads.clear();
 }
 
 void AsyncLinkedListTester::TestResult()

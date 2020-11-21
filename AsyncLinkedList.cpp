@@ -7,37 +7,39 @@ AsyncLinkedList::AsyncLinkedList()
 
 AsyncLinkedList::~AsyncLinkedList()
 {
-	std::lock_guard<std::mutex> lck(m_mutex);
-	std::vector<const Node*> nodes;
-	const Node* n = m_head;
-	while (n)
-	{
-		nodes.push_back(n);
-		n = n->m_next;
-	}
-	for (const auto& elem : nodes)
-	{
-		delete elem;
-	}
+	Clear();
 }
 
 void AsyncLinkedList::Insert(const int value)
 {
 //	std::lock_guard<std::mutex> lck(m_mutex);
 
+	/*
 	int expected = 0;
 	int desired = 1;
 	while (!m_atomic.compare_exchange_strong(expected, desired))
 	{
 		expected = 0;
-	}
+	}*/
 
 	Node* newNode = new Node();
 	newNode->m_value = value;
-	newNode->m_next = m_head;
-	m_head = newNode;
+	
+	while (true)
+	{
+		auto oldHead = m_head.load();
+		newNode->m_next = oldHead;
+		bool exchangedOk = m_head.compare_exchange_strong(oldHead, newNode);
+		if (exchangedOk)
+			break;
+	}
+	
 
-	m_atomic.store(0);
+	//std::atomic<std::shared_ptr<Node>> tn;
+	
+
+
+	//m_atomic.store(0);
 }
 
 void AsyncLinkedList::PrintLinkedList()
@@ -62,4 +64,21 @@ std::vector<int> AsyncLinkedList::GetLinkedListContents() const
 		n = n->m_next;
 	}
 	return res;
+}
+
+void AsyncLinkedList::Clear()
+{
+	std::lock_guard<std::mutex> lck(m_mutex);
+	std::vector<const Node*> nodes;
+	const Node* n = m_head;
+	while (n)
+	{
+		nodes.push_back(n);
+		n = n->m_next;
+	}
+	for (const auto& elem : nodes)
+	{
+		delete elem;
+	}
+	m_head = nullptr;
 }

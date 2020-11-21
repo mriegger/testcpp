@@ -18,17 +18,18 @@ public:
 	std::vector<int> GetLinkedListContents() const;
 
 	void Insert(const int value);
+	void Clear();
 
 private:
 
 	struct Node
 	{
-		Node* m_next = nullptr;
+		std::atomic<Node*> m_next = nullptr;
 		int m_value = INT_MAX;
 	};
 
 	std::atomic<int> m_atomic = 0;
 
-	Node* m_head = nullptr;
+	std::atomic<Node*> m_head = nullptr;
 	std::mutex m_mutex;
 };
