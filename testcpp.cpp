@@ -1,9 +1,13 @@
 // testcpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+
+import DefaultPrinter;
+
 #define D_REVERSED                                      1
 #define PERMUTATION_DEPTH D_REVERSED
-
 #include <iostream>
+#include <ranges>
+#include <concepts>
 #include <cassert>
 #include <map>
 #include <mutex>
@@ -473,10 +477,14 @@ void philo(int id)
     }
 }
 
+
 int main()
 {
-    AsyncLinkedListTester tester;
-    tester.Run();
+    DefaultPrinter p;
+    p.PrintHello();
+
+    //  AsyncLinkedListTester tester;
+//    tester.Run();
     return 0;
 };
 

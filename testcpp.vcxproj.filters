@@ -30,6 +30,9 @@
     <ClCompile Include="AsyncLinkedListTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyModule.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">
