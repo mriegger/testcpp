@@ -12,6 +12,7 @@ import MyModuleName;
 #include <cassert>
 #include <map>
 #include <mutex>
+#include <set>
 #include <type_traits>
 #include <thread>
 #include <vector>
@@ -479,10 +480,13 @@ void philo(int id)
 }
 
 
+
 int main()
 {
     unordered_set<MyModule::S, MyModule::S_Hasher> us;
     MyModule::S::PrintName();
+
+    set<MyModule::S> mySet;
 
     return 0;
 };
