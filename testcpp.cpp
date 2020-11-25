@@ -1,7 +1,8 @@
 // testcpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-import DefaultPrinter;
+import MyModuleName;
+
 
 #define D_REVERSED                                      1
 #define PERMUTATION_DEPTH D_REVERSED
@@ -480,11 +481,9 @@ void philo(int id)
 
 int main()
 {
-    DefaultPrinter p;
-    p.PrintHello();
+    unordered_set<MyModule::S, MyModule::S_Hasher> us;
+    MyModule::S::PrintName();
 
-    //  AsyncLinkedListTester tester;
-//    tester.Run();
     return 0;
 };
 

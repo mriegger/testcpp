@@ -152,6 +152,7 @@
     <ClCompile Include="AsyncLinkedList.cpp" />
     <ClCompile Include="AsyncLinkedListTester.cpp" />
     <ClCompile Include="AtomicInstructions.cpp" />
+    <ClCompile Include="MyModule.cpp" />
     <ClCompile Include="MyModule.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
