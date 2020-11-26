@@ -154,6 +154,7 @@
     <ClCompile Include="AtomicInstructions.cpp" />
     <ClCompile Include="MyModule.cpp" />
     <ClCompile Include="MyModule.ixx" />
+    <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
   </ItemGroup>

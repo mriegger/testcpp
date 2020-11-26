@@ -1,3 +1,5 @@
+import Spinlock;
+
 #pragma once
 
 #include <climits>
@@ -32,4 +34,6 @@ private:
 
 	std::atomic<Node*> m_head = nullptr;
 	std::mutex m_mutex;
+
+	Spinlock m_spinlock;
 };

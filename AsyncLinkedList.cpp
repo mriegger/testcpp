@@ -1,3 +1,4 @@
+
 #include "AsyncLinkedList.h"
 
 AsyncLinkedList::AsyncLinkedList()
@@ -12,19 +13,11 @@ AsyncLinkedList::~AsyncLinkedList()
 
 void AsyncLinkedList::Insert(const int value)
 {
-//	std::lock_guard<std::mutex> lck(m_mutex);
-
-	/*
-	int expected = 0;
-	int desired = 1;
-	while (!m_atomic.compare_exchange_strong(expected, desired))
-	{
-		expected = 0;
-	}*/
-
 	Node* newNode = new Node();
 	newNode->m_value = value;
 	
+#ifdef USE_COMPARE_AND_SWAP
+
 	while (true)
 	{
 		auto oldHead = m_head.load();
@@ -33,13 +26,18 @@ void AsyncLinkedList::Insert(const int value)
 		if (exchangedOk)
 			break;
 	}
-	
 
-	//std::atomic<std::shared_ptr<Node>> tn;
-	
+#else
+	//	std::lock_guard<std::mutex> lck(m_mutex);
 
+	m_spinlock.lock();
 
-	//m_atomic.store(0);
+	newNode->m_next.store(m_head);
+	m_head = newNode;
+
+	m_spinlock.unlock();
+
+#endif
 }
 
 void AsyncLinkedList::PrintLinkedList()

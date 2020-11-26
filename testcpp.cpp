@@ -483,6 +483,9 @@ void philo(int id)
 
 int main()
 {
+    AsyncLinkedListTester tester;
+    tester.Run();
+
     unordered_set<MyModule::S, MyModule::S_Hasher> us;
     MyModule::S::PrintName();
 
