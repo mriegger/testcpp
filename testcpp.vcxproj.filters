@@ -39,6 +39,12 @@
     <ClCompile Include="Spinlock.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProducerConsumer.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProducerConsumer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">

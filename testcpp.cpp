@@ -2,6 +2,7 @@
 //
 
 import MyModuleName;
+import ProducerConsumer;
 
 
 #define D_REVERSED                                      1
@@ -483,13 +484,10 @@ void philo(int id)
 
 int main()
 {
-    AsyncLinkedListTester tester;
+    ProducerConsumer tester;
     tester.Run();
 
-    unordered_set<MyModule::S, MyModule::S_Hasher> us;
-    MyModule::S::PrintName();
 
-    set<MyModule::S> mySet;
 
     return 0;
 };
