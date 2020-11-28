@@ -9,18 +9,18 @@ class AsyncLinkedListTester
 {
 public:
 
-	void Run();
+    void Run();
 
 private:
 
-	void SpawnThreads();
-	void JoinThreads();
-	void ThreadFunc(const int id);
-	void TestResult();
+    void SpawnThreads();
+    void JoinThreads();
+    void ThreadFunc(const int id);
+    void TestResult();
 
-	static const int NumThreads = 1000;
-	static const int NumNumbersToInsert = 1000;
+    static const int NumThreads = 20;
+    static const int NumNumbersToInsert = 1000;
 
-	std::vector<std::thread> m_threads;
-	AsyncLinkedList m_asyncLinkedList;
+    std::vector<std::thread> m_threads;
+    AsyncLinkedList m_asyncLinkedList;
 };

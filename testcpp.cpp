@@ -40,7 +40,7 @@ void MarkLightAsVisibleInSharedMemory(uint lightIndex, uint base)
 {
     const uint bucket_index = lightIndex / 32;
     const uint bucket_place = lightIndex % 32;
-//    InterlockedOr(tile_opaque[bucket_index], 1 << bucket_place);
+    //    InterlockedOr(tile_opaque[bucket_index], 1 << bucket_place);
     tile_opaque[bucket_index + base] |= 1 << bucket_place;
 }
 
@@ -62,9 +62,10 @@ struct S
 struct S2
 {
     int m_a, m_b;
-    S2(int a, int b):m_a(a), m_b(b)
+    S2(int a, int b)
+        : m_a(a)
+        , m_b(b)
     {
-
     }
 };
 
@@ -180,7 +181,7 @@ void TestHit1()
 #define Depth_to_Z(d, vUnprojectZ)                                      (vUnprojectZ.x / (d + vUnprojectZ.y))
 
 // IMPORTANT: we want to avoid getting exact value "32", so decrease by 1 ULP
-#define Tile_UnitValueToBit(x)          (saturate(x) * asfloat( asuint(32.0) - 1 ) )
+#define Tile_UnitValueToBit(x)          (saturate(x) * asfloat(asuint(32.0) - 1))
 
 
 struct sPerFrame
@@ -206,7 +207,7 @@ struct sPerFrame
     float           fRangeThreshold;
     uint            uiGridW;
     uint            _unused;
-}cb_perFrame;
+} cb_perFrame;
 
 struct sTileData
 {
@@ -217,7 +218,7 @@ struct sTileData
     uint    logMaxBins;
 };
 
-#if( PERMUTATION_DEPTH == D_REVERSED )
+#if (PERMUTATION_DEPTH == D_REVERSED)
 
 #define DEPTH_Min                               max
 #define DEPTH_Max                               min
@@ -290,7 +291,8 @@ struct DefaultIbl
     {
         cout << "ctor" << endl;
     }
-    DefaultIbl(const DefaultIbl& rhs) {
+    DefaultIbl(const DefaultIbl& rhs)
+    {
         cout << "copy ctor" << endl;
     };
     DefaultIbl& operator=(const DefaultIbl& rhs)
@@ -377,8 +379,8 @@ RayRayIntersectOutput RayRayIntersect(float3 o0, float3 o1, float3 r0, float3 r1
     return o;
 }
 
-class Solution {
-
+class Solution
+{
     int m_result = 0;
     bool m_roundsPerfectly = false;
 
@@ -389,7 +391,10 @@ class Solution {
             m_roundsPerfectly = true;
             return true;
         }
-        if (divisor > dividend)return false;
+        if (divisor > dividend)
+        {
+            return false;
+        }
         unsigned int count = 1;
         auto currSubtractValue = divisor;
         while (currSubtractValue < (UINT_MAX >> 1) && currSubtractValue + currSubtractValue <= dividend)
@@ -404,7 +409,10 @@ class Solution {
 
     int sign(int x)
     {
-        if (x == 0)return 0;
+        if (x == 0)
+        {
+            return 0;
+        }
         return x < 0 ? -1 : 1;
     }
 
@@ -476,7 +484,6 @@ void philo(int id)
             forks[rightId].unlock();
             forks[leftId].unlock();
         }
-
     }
 }
 
@@ -484,8 +491,8 @@ void philo(int id)
 
 int main()
 {
-    ProducerConsumer tester;
-    tester.Run();
+    AsyncLinkedListTester t;
+    t.Run();
 
 
 
