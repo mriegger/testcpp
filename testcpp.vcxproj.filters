@@ -21,9 +21,6 @@
     <ClCompile Include="TextureSampling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AtomicInstructions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AsyncLinkedList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,6 +42,12 @@
     <ClCompile Include="ProducerConsumer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ReaderWriter.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReaderWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">
@@ -54,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContiguousLinkedList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AtomicInstructions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DiningPhilosophers.h">

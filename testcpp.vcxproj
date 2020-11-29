@@ -151,11 +151,12 @@
   <ItemGroup>
     <ClCompile Include="AsyncLinkedList.cpp" />
     <ClCompile Include="AsyncLinkedListTester.cpp" />
-    <ClCompile Include="AtomicInstructions.cpp" />
     <ClCompile Include="MyModule.cpp" />
     <ClCompile Include="MyModule.ixx" />
     <ClCompile Include="ProducerConsumer.cpp" />
     <ClCompile Include="ProducerConsumer.ixx" />
+    <ClCompile Include="ReaderWriter.cpp" />
+    <ClCompile Include="ReaderWriter.ixx" />
     <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
@@ -163,7 +164,6 @@
   <ItemGroup>
     <ClInclude Include="AsyncLinkedList.h" />
     <ClInclude Include="AsyncLinkedListTester.h" />
-    <ClInclude Include="AtomicInstructions.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="DiningPhilosophers.h" />
     <ClInclude Include="hlsl.h" />
