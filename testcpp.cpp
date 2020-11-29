@@ -491,8 +491,8 @@ void philo(int id)
 
 int main()
 {
-    AsyncLinkedListTester t;
-    t.Run();
+    ProducerConsumer p;
+    p.Run();
 
 
 
