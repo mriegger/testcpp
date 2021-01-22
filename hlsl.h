@@ -95,6 +95,12 @@ struct float3
     {
         return x * x + y * y + z * z;
     }
+
+    // overloaded minus(-) operator
+    float3 operator-() 
+    {
+        return float3(-x, -y, -z);
+    }
 };
 
 inline float dot(float3 a, float3 b)
@@ -108,6 +114,15 @@ inline float3 operator/(float f, float3 v)
     res.x /= v.x;
     res.y /= v.y;
     res.z /= v.z;
+    return res;
+}
+
+inline float3 operator/(float3 v, float f)
+{
+    float3 res = v;
+    res.x /= f;
+    res.y /= f;
+    res.z /= f;
     return res;
 }
 
@@ -133,6 +148,11 @@ struct float4
     float4(float a, float b, float c, float d) :x(a), y(b), z(c), w(d)
     {
     }
+
+    float4(float3 v, float f):x(v.x), y(v.y), z(v.z), w(f)
+    {       
+    }
+
     float4(float scalar)
     {
         x = y = z = w = scalar;
