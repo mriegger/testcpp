@@ -48,6 +48,12 @@
     <ClCompile Include="ReaderWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConcurrencyChecker.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearAlgebra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">
@@ -66,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AsyncLinkedListTester.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearAlgebra.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

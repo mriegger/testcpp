@@ -40,6 +40,7 @@ inline float step(float y, float x)
 struct float2
 {
     float2() = default;
+    float2(float val) :x(val), y(val) {}
     float2(float x, float y) :x(x), y(y) {}
     float x, y;
 
@@ -57,6 +58,13 @@ inline float2 floor(const float2 v)
     result.x = floor(v.x);
     result.y = floor(v.y);
     return result;
+}
+
+inline float2 clamp(float2 val, float2 minVal, float2 maxVal)
+{
+    val.x = std::clamp(val.x, minVal.x, maxVal.x);
+    val.y = std::clamp(val.y, minVal.y, maxVal.y);
+    return val;
 }
 
 inline float2 min(float2 a, float2 b)
@@ -77,6 +85,11 @@ inline float2 max(float2 a, float2 b)
     res.x = max(a.x, b.x);
     res.y = max(a.y, b.y);
     return res;
+}
+
+inline float dot(float2 a, float2 b)
+{
+    return a.x * b.x + a.y * b.y;
 }
 
 struct float3

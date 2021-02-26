@@ -26,6 +26,7 @@ import ReaderWriter;
 #include "TextureSampling.h"
 #include "DiningPhilosophers.h"
 #include "AsyncLinkedListTester.h"
+#include "LinearAlgebra.h"
 
 using namespace std;
 
@@ -188,13 +189,33 @@ void philo(int id)
 }
 
 
+class C
+{
+public:
+    static constexpr string_view Name = "nejknekj";
+};
+
+void Print(const string_view sv)
+{
+    cout << sv << endl;
+}
+
+constexpr double div(double d) 
+{
+    return d / 2.0;
+}
 
 int main()
 {
-    ReaderWriter rw;
-    rw.Run();
+    float3 s1 = float3(5, 0, 1.234);
+    float3 v1 = normalize(float3(-1, 1, 0));
 
+    float3 s2 = float3(-5, 0, 0);
+    float3 v2 = normalize(float3(1, 1, 0));
+    float d = LinearAlgebra::DistanceBetweenTwoRays(s1,v1,s2,v2);
+    cout << d << endl;
 
     return 0;
 };
+
 
