@@ -153,6 +153,7 @@
     <ClCompile Include="AsyncLinkedListTester.cpp" />
     <ClCompile Include="ConcurrencyChecker.ixx" />
     <ClCompile Include="LinearAlgebra.cpp" />
+    <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="MyModule.cpp" />
     <ClCompile Include="MyModule.ixx" />
     <ClCompile Include="ProducerConsumer.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="DiningPhilosophers.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="LinearAlgebra.h" />
+    <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="TextureSampling.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

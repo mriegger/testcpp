@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+#include <cassert>
 #include <algorithm>    // std::min
 
 using uint = uint32_t;
@@ -55,8 +57,8 @@ struct float2
 inline float2 floor(const float2 v)
 {
     float2 result;
-    result.x = floor(v.x);
-    result.y = floor(v.y);
+    result.x = floorf(v.x);
+    result.y = floorf(v.y);
     return result;
 }
 
@@ -212,6 +214,11 @@ inline float saturate(float v)
     return v;
 }
 
+inline float dot(const float4 a, const float4 b)
+{
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
 inline float2 saturate(float2 v)
 {
     float2 res = v;
@@ -232,7 +239,7 @@ inline float4 saturate(float4 v)
 
 inline float rsqrt(float f)
 {
-    return 1.0f / sqrt(f);
+    return 1.0f / sqrtf(f);
 }
 
 inline float2 operator-(float2 a, float2 b)
@@ -546,4 +553,25 @@ inline uint asuint(float f)
     }convert;
     convert.f = f;
     return convert.u;
+}
+
+struct float4x4
+{
+    std::array<float4, 4> m_rows;
+
+    void SetRow(int row, float a, float b, float c, float d)
+    {
+        assert(row >= 0 && row < 4);
+        m_rows[row] = float4(a,b,c,d);
+    }
+};
+
+inline float4 mul(const float4x4 mat, const float4 v)
+{
+    float4 res;
+    res.x = dot(mat.m_rows[0], v);
+    res.y = dot(mat.m_rows[1], v);
+    res.z = dot(mat.m_rows[2], v);
+    res.w = dot(mat.m_rows[3], v);
+    return res;
 }

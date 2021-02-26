@@ -27,6 +27,7 @@ import ReaderWriter;
 #include "DiningPhilosophers.h"
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
+#include "Matrix4x4.h"
 
 using namespace std;
 
@@ -214,6 +215,26 @@ int main()
     float3 v2 = normalize(float3(1, 1, 0));
     float d = LinearAlgebra::DistanceBetweenTwoRays(s1,v1,s2,v2);
     cout << d << endl;
+
+    float deg = 90;
+    float rad = deg * 3.14159f / 180.0f;
+    float4x4 persp = Matrix4x4::MakePerspectiveFovMatrixRH(rad, 4.0 / 3.0, 0.1, 10000, false);
+    float4x4 persp_rever = Matrix4x4::MakePerspectiveFovMatrixRH(rad, 4.0 / 3.0, 0.1, 10000, true);
+
+
+    //float4 tr = mul(persp_rever, position);
+    //float trz = tr.z / tr.w;
+
+    for (float z = 0; z < 1000; z += 100)
+    {
+        float4 position = float4(0, 0, -z, 1);
+        float4 t = mul(persp, position);
+        float tz = t.z / t.w;
+        cout << tz << endl;
+    }
+
+    // reverse depth, near = 1, far = 0
+
 
     return 0;
 };
