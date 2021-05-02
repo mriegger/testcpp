@@ -349,6 +349,26 @@ inline float4 operator*(float4 v, float f)
     return res;
 }
 
+inline float4 operator*(const float4 a, const float4 b)
+{
+    float4 res = a;
+    res.x *= b.x;
+    res.y *= b.y;
+    res.z *= b.z;
+    res.w *= b.w;
+    return res;
+}
+
+inline float4 operator+(const float4 a, const float4 b)
+{
+    float4 res = a;
+    res.x += b.x;
+    res.y += b.y;
+    res.z += b.z;
+    res.w += b.w;
+    return res;
+}
+
 inline float4 step(float4 a, float4 b)
 {
     float4 res;
@@ -555,6 +575,12 @@ inline uint asuint(float f)
     return convert.u;
 }
 
+struct int2
+{
+    int x;
+    int y;
+};
+
 struct float4x4
 {
     std::array<float4, 4> m_rows;
@@ -574,4 +600,16 @@ inline float4 mul(const float4x4 mat, const float4 v)
     res.z = dot(mat.m_rows[2], v);
     res.w = dot(mat.m_rows[3], v);
     return res;
+}
+
+template<typename T>
+inline T mad(const T a, const T b, const T c)
+{
+    return a * b + c;
+}
+
+template<>
+inline float4 mad(const float4 a, const float4 b, const float4 c)
+{
+    return a * b + c;
 }
