@@ -118,6 +118,14 @@ struct float3
     }
 };
 
+inline float3 cross(const float3 a, const float3 b)
+{
+    float x = a.y * b.z - a.z * b.y;
+    float y = a.z * b.x - a.x * b.z;
+    float z = a.x * b.y - a.y * b.x;
+    return float3(x, y, z);
+}
+
 inline float dot(float3 a, float3 b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
