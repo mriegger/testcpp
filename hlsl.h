@@ -337,6 +337,16 @@ inline float4 operator+(float4 v, float f)
     return res;
 }
 
+inline float4 operator-(const float4 a, const float4 b)
+{
+    float4 res = a;
+    res.x -= b.x;
+    res.y -= b.y;
+    res.z -= b.z;
+    res.w -= b.w;
+    return res;
+}
+
 inline float4 operator/(float f, float4 v)
 {
     float4 res = float4(f, f, f, f);
