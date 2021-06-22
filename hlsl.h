@@ -631,3 +631,20 @@ inline float4 mad(const float4 a, const float4 b, const float4 c)
 {
     return a * b + c;
 }
+
+inline float4 operator/(const float4 v, const float f)
+{
+    float4 res = v;
+    res.x /= f;
+    res.y /= f;
+    res.z /= f;
+    res.w /= f;
+    return res;
+}
+
+inline void sincos(const float f, float& s, float& c)
+{
+    s = sinf(f);
+    c = cosf(f);
+}
+
