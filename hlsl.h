@@ -94,6 +94,12 @@ inline float dot(float2 a, float2 b)
     return a.x * b.x + a.y * b.y;
 }
 
+template<typename A, typename B>
+inline float dot(const A a, const B b)
+{
+    return (float)a.x * (float)b.x + (float)a.y * (float)b.y;
+}
+
 struct float3
 {
     float x, y, z;
@@ -440,6 +446,26 @@ inline uint2 operator|=(uint2 a, uint2 b)
     return res;
 }
 
+struct uint3
+{
+    uint x, y, z;
+    uint3() = default;
+    uint3(const uint x, const uint y, const uint z) :x(x), y(y), z(z)
+    {
+
+    }
+
+    uint3(const float3 v) : x(v.x), y(v.y), z(v.z)
+    {
+
+    }
+
+    uint2 xy()const
+    {
+        return uint2(x, y);
+    }
+};
+
 struct uint4
 {
     uint x, y, z, w;
@@ -598,6 +624,50 @@ struct int2
     int x;
     int y;
 };
+
+inline int2 operator*(const int2 v, const int s)
+{
+    int2 res = v;
+    res.x *= s;
+    res.y *= s;
+    return res;
+}
+
+struct int3
+{
+    int x;
+    int y;
+    int z;
+
+    int3(const int2 v, const int s) :x(v.x), y(v.y), z(s)
+    {
+
+    }
+
+    int3(const uint3 v) : x(v.x), y(v.y), z(v.z)
+    {
+
+    }
+};
+
+inline int3 operator+(const int3 a, const int3 b)
+{
+    int3 res = a;
+    res.x += b.x;
+    res.y += b.y;
+    res.z += b.z;
+    return res;
+}
+
+inline int3 operator+(const uint3 a, const int3 b)
+{
+    int3 res = a;
+    res.x += b.x;
+    res.y += b.y;
+    res.z += b.z;
+    return res;
+}
+
 
 struct float4x4
 {
