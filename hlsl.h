@@ -718,3 +718,14 @@ inline void sincos(const float f, float& s, float& c)
     c = cosf(f);
 }
 
+inline constexpr float degrees(const float radians)
+{
+    constexpr float Pi = 3.14159265358979323846f;
+    return radians / Pi * 180.0f;
+}
+
+inline constexpr float radians(const float degrees)
+{
+    constexpr float Pi = 3.14159265358979323846f;
+    return degrees * Pi / 180.0f;
+}
