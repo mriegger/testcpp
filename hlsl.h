@@ -729,3 +729,20 @@ inline constexpr float radians(const float degrees)
     constexpr float Pi = 3.14159265358979323846f;
     return degrees * Pi / 180.0f;
 }
+
+template<typename T>
+T sign(const T value)
+{
+    if (value == 0)
+        return 0;
+    else if (value > 0)
+        return 1;
+    else
+        return -1;
+}
+
+inline float distance(const float3 a, const float3 b)
+{
+    const auto diff = a - b;
+    return length(diff);
+}
