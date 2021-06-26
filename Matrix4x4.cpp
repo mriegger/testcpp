@@ -38,4 +38,29 @@ namespace Matrix4x4
 
         return out;
     }
+
+    float4x4 MakeOrthographicMatrixRH(float left, float right, float bottom, float top, float nearDist, float farDist)
+    {
+        assert(right > left, "right should be greater than left");
+        // valid to have matrix invert top/bottom and far/near
+        //AZ_Assert(top > bottom, "top should be greater than bottom");
+        //AZ_Assert(farDist > nearDist, "far should be greater than near");
+        float4x4 out;
+
+        if (!(right > left /*&& top > bottom && farDist > nearDist*/))
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                out.SetRow(i, 0, 0, 0, 0);
+            }
+            return out;
+        }
+
+        out.SetRow(0, 2.f / (right - left), 0.f, 0.f, -(right + left) / (right - left));
+        out.SetRow(1, 0.f, 2.f / (top - bottom), 0.f, -(top + bottom) / (top - bottom));
+        out.SetRow(2, 0.f, 0.f, 1 / (nearDist - farDist), nearDist / (nearDist - farDist));
+        out.SetRow(3, 0.f, 0.f, 0, 1.f);
+        return out;
+    }
+
 }
