@@ -152,6 +152,7 @@
     <ClCompile Include="AsyncLinkedList.cpp" />
     <ClCompile Include="AsyncLinkedListTester.cpp" />
     <ClCompile Include="ConcurrencyChecker.ixx" />
+    <ClCompile Include="half.cpp" />
     <ClCompile Include="LinearAlgebra.cpp" />
     <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="MyModule.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="AsyncLinkedListTester.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="DiningPhilosophers.h" />
+    <ClInclude Include="half.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />

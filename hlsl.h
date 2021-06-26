@@ -3,8 +3,11 @@
 #include <array>
 #include <cassert>
 #include <algorithm>    // std::min
+#include "half.h"
 
+using half = FLOAT16;
 using uint = uint32_t;
+using dword = uint32_t;
 
 template<typename T>
 T clamp(T val, T minVal, T maxVal)
