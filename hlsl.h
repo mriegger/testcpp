@@ -746,3 +746,11 @@ inline float distance(const float3 a, const float3 b)
     const auto diff = a - b;
     return length(diff);
 }
+
+inline float smoothstep(const float edge0, const float edge1, const float x)
+{
+    // Scale, bias and saturate x to 0..1 range
+    const float res = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+    // Evaluate polynomial
+    return res * res * (3 - 2 * res);
+}
