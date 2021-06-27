@@ -757,3 +757,35 @@ inline float smoothstep(const float edge0, const float edge1, const float x)
     // Evaluate polynomial
     return res * res * (3 - 2 * res);
 }
+
+inline uint countbits(const uint value)
+{
+    uint count = 0;
+    uint iter = value;
+    while (iter)
+    {
+        count++;
+        iter = iter & (iter - 1);
+    }
+    return count;
+}
+
+inline float rcp(const float value)
+{
+    return 1.0f / value;
+}
+
+inline uint reversebits(uint n)
+{
+    unsigned int rev = 0;
+    for(uint i = 0 ; i < 32 ; ++i)
+    {
+        rev <<= 1;
+
+        if ((n & 1) == 1)
+            rev ^= 1;
+
+        n >>= 1;
+    }
+    return rev;
+}
