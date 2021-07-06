@@ -222,6 +222,38 @@ struct float4
         z = v.x;
         w = v.y;
     }
+
+    float& operator[](std::size_t idx) 
+    {
+        assert(idx < 4);
+        switch (idx)
+        {
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        case 3:
+            return w;
+        }
+    }
+
+    const float& operator[](std::size_t idx) const 
+    {
+        assert(idx < 4);
+        switch (idx)
+        {
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        case 3:
+            return w;
+        }
+    }
 };
 
 inline float saturate(float v)
@@ -810,5 +842,4 @@ inline void GroupMemoryBarrier() { }
 // Blocks execution of all threads in a group until all group shared accesses have been completed 
 // and all threads in the group have reached this call.
 inline void GroupMemoryBarrierWithGroupSync() { }
-
 
