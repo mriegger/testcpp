@@ -41,7 +41,8 @@ namespace Matrix4x4
 
     float4x4 MakeOrthographicMatrixRH(float left, float right, float bottom, float top, float nearDist, float farDist)
     {
-        assert(right > left, "right should be greater than left");
+        // right should be greater than left
+        assert(right > left);
         // valid to have matrix invert top/bottom and far/near
         //AZ_Assert(top > bottom, "top should be greater than bottom");
         //AZ_Assert(farDist > nearDist, "far should be greater than near");

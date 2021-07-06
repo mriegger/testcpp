@@ -458,7 +458,7 @@ struct uint3
 
     }
 
-    uint3(const float3 v) : x(v.x), y(v.y), z(v.z)
+    uint3(const float3 v) : x((uint)v.x), y((uint)v.y), z((uint)v.z)
     {
 
     }
