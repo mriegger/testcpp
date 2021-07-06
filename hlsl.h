@@ -789,3 +789,26 @@ inline uint reversebits(uint n)
     }
     return rev;
 }
+
+// Blocks execution of all threads in a group until all memory accesses have been completed.
+inline void AllMemoryBarrier() { }
+
+// Blocks execution of all threads in a group until all memory accesses have been completed 
+// and all threads in the group have reached this call.
+inline void AllMemoryBarrierWithGroupSync() { }
+
+// Blocks execution of all threads in a group until all device memory accesses have been completed.
+inline void DeviceMemoryBarrier() { }
+
+// Blocks execution of all threads in a group until all device memory accesses have been completed
+// and all threads in the group have reached this call.
+inline void DeviceMemoryBarrierWithGroupSync() { }
+
+// Blocks execution of all threads in a group until all group shared accesses have been completed.
+inline void GroupMemoryBarrier() { }
+
+// Blocks execution of all threads in a group until all group shared accesses have been completed 
+// and all threads in the group have reached this call.
+inline void GroupMemoryBarrierWithGroupSync() { }
+
+
