@@ -809,7 +809,7 @@ inline float distance(const float3 a, const float3 b)
     const auto diff = a - b;
     return length(diff);
 }
-
+// Returns a smooth Hermite interpolation between 0 and 1, if x is in the range [edge0, edge1].
 inline float smoothstep(const float edge0, const float edge1, const float x)
 {
     // Scale, bias and saturate x to 0..1 range
