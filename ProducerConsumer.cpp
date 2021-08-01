@@ -50,7 +50,7 @@ void ProducerConsumer::ConsumerFunc()
 		}
 	}
 
-	std::sort(gatheredResults.begin(), gatheredResults.end());
+	std::ranges::sort(gatheredResults);
 	for (size_t i = 0; i < gatheredResults.size(); ++i)
 	{
 		assert(gatheredResults[i] == (i / NumDataProducedByEachThread));

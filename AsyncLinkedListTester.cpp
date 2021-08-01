@@ -43,7 +43,7 @@ void AsyncLinkedListTester::JoinThreads()
 void AsyncLinkedListTester::TestResult()
 {
     auto results = m_asyncLinkedList.GetLinkedListContents();
-    std::sort(results.begin(), results.end());
+    std::ranges::sort(results);
     assert(results.size() == NumThreads * NumNumbersToInsert);
     for (int i = 0; i < NumThreads * NumNumbersToInsert; ++i)
     {

@@ -76,8 +76,8 @@ void ReaderWriter::SpawnThreads()
 
 void ReaderWriter::JoinThreads()
 {
-    for_each(m_readerThreads.begin(), m_readerThreads.end(), [](auto& t) {t.join(); });
-    for_each(m_writerThreads.begin(), m_writerThreads.end(), [](auto& t) {t.join(); });
+    std::ranges::for_each(m_readerThreads, [](auto& t) {t.join(); });
+    std::ranges::for_each(m_writerThreads, [](auto& t) {t.join(); });
 
     m_writerThreads.clear();
     m_readerThreads.clear();
