@@ -170,6 +170,7 @@
     <ClInclude Include="AsyncLinkedListTester.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="DiningPhilosophers.h" />
+    <ClInclude Include="Endianness.h" />
     <ClInclude Include="half.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="LinearAlgebra.h" />

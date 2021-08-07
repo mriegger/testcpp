@@ -28,6 +28,7 @@ import ReaderWriter;
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
 #include "Matrix4x4.h"
+#include "Endianness.h"
 
 using namespace std;
 
@@ -639,11 +640,55 @@ int countbitsrow(int x)
     return best;
 }
 
+int multitasking(vector<int>& v)
+{
+    int timeLastInsertion = 0;
+    unordered_map<int, int> startTimes;
+
+    startTimes[v[0]] = 0;
+
+    for (int i = 1; i < v.size(); ++i)
+    {
+        int taskNo = v[i];
+        auto iter = startTimes.find(taskNo);
+        if (iter == startTimes.end())
+        {
+            startTimes[taskNo] = timeLastInsertion + 1;
+        }
+        else
+        {
+            startTimes[taskNo] = max(startTimes[taskNo] + 3, timeLastInsertion + 1);
+        }
+        timeLastInsertion = startTimes[taskNo];
+    }
+    int ans = 0;
+    for (const auto& elem : startTimes)
+    {
+        ans = max(ans, elem.second + 2);
+    }
+    ans--;
+    return ans;
+}
+
+uint32_t MySwapEndian(uint32_t x)
+{
+    uint32_t a, b, c, d;
+    a = x << 24;
+    a &= 0xFF000000;
+    b = x << 8;
+    b &= 0x00FF0000;
+    c = x >> 8;
+    c &= 0x0000FF00;
+    d = x >> 24;
+    d &= 0x000000FF;
+
+    return a|b|c|d;
+}
+
 int main()
 {
-    ReaderWriter rw;
-    rw.Run();
-
+    auto x = SwapEndianness(9);
+    assert(x == MySwapEndian(9));
 
     return 0;
 };
