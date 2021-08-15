@@ -29,6 +29,7 @@ import ReaderWriter;
 #include "LinearAlgebra.h"
 #include "Matrix4x4.h"
 #include "Endianness.h"
+#include "BasicCalculator.h"
 
 using namespace std;
 
@@ -685,10 +686,15 @@ uint32_t MySwapEndian(uint32_t x)
     return a|b|c|d;
 }
 
+int tc(int x)
+{
+    return ~x + 1;
+}
+
 int main()
 {
-    auto x = SwapEndianness(9);
-    assert(x == MySwapEndian(9));
+    BasicCalculator bc;
+    int res = bc.Calc("(3+(4-2))-2");
 
     return 0;
 };

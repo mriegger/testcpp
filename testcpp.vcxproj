@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="AsyncLinkedList.h" />
     <ClInclude Include="AsyncLinkedListTester.h" />
+    <ClInclude Include="BasicCalculator.h" />
     <ClInclude Include="ContiguousLinkedList.h" />
     <ClInclude Include="DiningPhilosophers.h" />
     <ClInclude Include="Endianness.h" />
