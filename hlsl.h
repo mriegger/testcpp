@@ -49,6 +49,11 @@ struct float2
     float2(float x, float y) :x(x), y(y) {}
     float x, y;
 
+    float2 xy()const
+    {
+        return float2(x, y);
+    }
+
     float2& operator*=(float2 rhs)
     {
         x *= rhs.x;
@@ -835,6 +840,11 @@ inline float rcp(const float value)
     return 1.0f / value;
 }
 
+inline float2 rcp(const float2 v)
+{
+    return float2(1.0f / v.x, 1.0f / v.y);
+}
+
 inline uint reversebits(uint n)
 {
     unsigned int rev = 0;
@@ -848,6 +858,14 @@ inline uint reversebits(uint n)
         n >>= 1;
     }
     return rev;
+}
+
+inline float2 abs(const float2 v)
+{
+    float2 res;
+    res.x = abs(v.x);
+    res.y = abs(v.y);
+    return res;
 }
 
 // Blocks execution of all threads in a group until all memory accesses have been completed.
