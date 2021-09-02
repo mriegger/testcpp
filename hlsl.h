@@ -120,9 +120,19 @@ struct float3
         x = y = z = scalar;
     }
 
-    float SquaredLength()const
+    float SquaredLength() const
     {
         return x * x + y * y + z * z;
+    }
+
+    float2 xy() const
+    {
+        return float2(x, y);
+    }
+
+    float3 xyz() const
+    {
+        return float3(x, y, z);
     }
 
     // overloaded minus(-) operator
