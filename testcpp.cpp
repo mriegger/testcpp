@@ -30,6 +30,7 @@ import ReaderWriter;
 #include "Matrix4x4.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
+#include "SpaceshipOperator.h"
 #include "TopologicalSort.h"
 
 using namespace std;
@@ -713,7 +714,8 @@ std::optional<MyRes> GetRes(bool actuallyGet)
 int main()
 {
     TopologicalSort::Test();
-    
+    BasicCalculator::Test();
+    SpaceshipOperator::Test();
 
     return 0;
 };

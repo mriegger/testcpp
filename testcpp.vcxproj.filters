@@ -101,5 +101,8 @@
     <ClInclude Include="TopologicalSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpaceshipOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
