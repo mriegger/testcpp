@@ -3,10 +3,30 @@
 #include <string>
 #include <stack>
 #include <utility>
+#include <cassert>
 
 class BasicCalculator
 {
 public:
+
+    long long Calc(const std::string& s)
+    {
+        m_s = s;
+        auto x = recurse(0);
+        return x.first;
+    }
+
+    static void Test()
+    {
+        BasicCalculator c;
+        auto result = c.Calc("-(5+4)");
+        assert(result == -9);
+
+        result = c.Calc("(5+6)-(9+2)");
+        assert(result == 0);
+    }
+
+private:
 
     static long long ApplyOp(long long a, long long b, char op)
     {
@@ -15,14 +35,7 @@ public:
         else return a - b;
     }
 
-    long long Calc(std::string s)
-    {
-        m_s = std::move(s);
-        auto x = rec(0);
-        return x.first;
-    }
-
-    std::pair<long long, long long> rec(long long loc)
+    std::pair<long long, long long> recurse(long long loc)
     {
         long long res = 0;
         char op = '+';
@@ -35,7 +48,7 @@ public:
             }
             else if (m_s[i] == '(')
             {
-                auto x = rec(i + 1);
+                auto x = recurse(i + 1);
                 res = ApplyOp(res, x.first, op);
                 i = x.second;
             }
@@ -60,5 +73,6 @@ public:
         res = ApplyOp(res, currNum, op);
         return std::make_pair(res, m_s.size());
     }
+
     std::string m_s;
 };
