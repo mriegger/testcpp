@@ -60,6 +60,9 @@
     <ClCompile Include="half.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TopologicalSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hlsl.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicCalculator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TopologicalSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

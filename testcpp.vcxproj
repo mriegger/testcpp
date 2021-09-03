@@ -164,6 +164,7 @@
     <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
+    <ClCompile Include="TopologicalSort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsyncLinkedList.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="TextureSampling.h" />
+    <ClInclude Include="TopologicalSort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

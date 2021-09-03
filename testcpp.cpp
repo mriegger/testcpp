@@ -30,6 +30,7 @@ import ReaderWriter;
 #include "Matrix4x4.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
+#include "TopologicalSort.h"
 
 using namespace std;
 
@@ -691,10 +692,28 @@ int tc(int x)
     return ~x + 1;
 }
 
+struct MyRes
+{
+    int x = 5;
+    int y = 6;
+};
+
+std::optional<MyRes> GetRes(bool actuallyGet)
+{
+    if (actuallyGet)
+    {
+        return MyRes{ 99,100 };
+    }
+    else
+    {
+        return std::nullopt;
+    }
+}
+
 int main()
 {
-    BasicCalculator bc;
-    int res = bc.Calc("(3+(4-2))-2");
+    TopologicalSort::Test();
+    
 
     return 0;
 };
