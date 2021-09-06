@@ -177,6 +177,7 @@
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="RandomNumberGenerator.h" />
     <ClInclude Include="SpaceshipOperator.h" />
     <ClInclude Include="TextureSampling.h" />
     <ClInclude Include="TopologicalSort.h" />
