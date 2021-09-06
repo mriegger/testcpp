@@ -17,6 +17,7 @@ import ReaderWriter;
 #include <type_traits>
 #include <thread>
 #include <vector>
+#include "timer.h"
 #include <functional>
 #include <array>
 #include <semaphore>
@@ -82,77 +83,6 @@ RayRayIntersectOutput RayRayIntersect(float3 o0, float3 o1, float3 r0, float3 r1
     return o;
 }
 
-class Solution
-{
-    int m_result = 0;
-    bool m_roundsPerfectly = false;
-
-    bool divideByDoubling(unsigned int dividend, unsigned divisor)
-    {
-        if (dividend == 0)
-        {
-            m_roundsPerfectly = true;
-            return true;
-        }
-        if (divisor > dividend)
-        {
-            return false;
-        }
-        unsigned int count = 1;
-        auto currSubtractValue = divisor;
-        while (currSubtractValue < (UINT_MAX >> 1) && currSubtractValue + currSubtractValue <= dividend)
-        {
-            currSubtractValue += currSubtractValue;
-            count += count;
-        }
-        m_result += count;
-        dividend -= currSubtractValue;
-        return divideByDoubling(dividend, divisor);
-    }
-
-    int sign(int x)
-    {
-        if (x == 0)
-        {
-            return 0;
-        }
-        return x < 0 ? -1 : 1;
-    }
-
-public:
-    int divide(int dividend, int divisor)
-    {
-        int numLessZero = dividend < 0 ? 1 : 0;
-        numLessZero += divisor < 0 ? 1 : 0;
-
-        if (dividend == INT_MIN && abs(divisor) == 1)
-        {
-            if (numLessZero == 1)
-            {
-                return INT_MIN;
-            }
-            else
-            {
-                return INT_MAX;
-            }
-        }
-
-
-        unsigned int a = dividend != INT_MIN ? abs(dividend) : -INT_MAX;
-        unsigned int b = divisor != INT_MIN ? abs(divisor) : -INT_MAX;
-
-
-        divideByDoubling(a, b);
-        auto res = numLessZero == 1 ? -m_result : m_result;
-        if (m_roundsPerfectly == false && numLessZero == 1)
-        {
-            res--;
-        }
-
-        return res;
-    }
-};
-
 vector<mutex> forks;
 atomic<uint64_t> numPlatesEaten;
 
@@ -190,506 +120,220 @@ void philo(int id)
     }
 }
 
-struct MyOps
-{
-    static int Plus(int a, int b)
-    {
-        return a + b;
-    }
-};
-
-template<typename T>
-T my_upper_bound(T b, T e, int target)
-{
-    T iter = b;
-    int count = distance(b, e);
-    while (count > 0)
-    {
-        int step = count / 2;
-        T curr = iter + step;
-        if (*curr <= target)
-        {
-            iter = curr + 1;
-            count -= step + 1;
-        }
-        else // curr > target
-        {
-            count = step;
-        }
-    }
-    return iter;
-}
-
-template<typename T>
-T my_lower_bound(T b, T e, int target)
-{
-    T iter = b;
-    int count = distance(b, e);
-    while (count > 0)
-    {
-        int step = count / 2;
-        T test = iter + step;
-        if (*test < target)
-        {
-            iter = test + 1;
-            count -= step + 1;
-        }
-        else if (*test == target)
-        {
-            iter = test;
-            count -= step;
-        }
-        else
-        {
-            count /= 2;
-        }
-    }
-    return iter;
-}
-
-class Sum
-{
+class Solution {
 public:
 
-    void print(const vector<int>& v) {
-        for (const auto elem : v)cout << elem << " ";
-        cout << endl;
-    }
-
-    void combinationSum(vector<int>& nums, int target) {
-        ranges::sort(nums);
-        vector<int> partial;
-        CombinationSum(nums, target, 0, partial, 0);
-    }
-
-    void CombinationSum(const vector<int>& nums, int target, int sum, vector<int>& partial, int start)
+    struct Trie
     {
-        if (sum == target) {
-            print(partial);
+        Trie() {
+            fill(children.begin(), children.end(), nullptr);
         }
-        for (int i = start; i < nums.size(); ++i) {
-            int c = nums[i];
-            if (sum + c > target || i > start && nums[i] == nums[i - 1]) {
-                continue;
+        bool wordEndsHere = false;
+        string word;
+        array<unique_ptr<Trie>, 26> children;
+
+        Trie* AddChild(char c)
+        {
+            int index = c - 'a';
+            children[index] = make_unique<Trie>();
+            return children[index].get();
+        }
+
+        bool HasChild(char c)const
+        {
+            if (c == '#')
+                return false;
+
+            int charIndex = c - 'a';
+            return children[charIndex].get() != nullptr;
+        }
+
+        Trie* GetChild(char c)const
+        {
+
+            int charIndex = c - 'a';
+            return children[charIndex].get();
+        }
+
+        void AddWord(const string& s, int index = 0)
+        {
+            if (index >= s.size())
+            {
+                wordEndsHere = true;
+                word = s;
+                return;
             }
-            partial.push_back(c);
-            CombinationSum(nums, target, sum + c, partial, i + 1);
-            partial.pop_back();
+
+            char currChar = s.at(index);
+            int charIndex = currChar - 'a';
+            Trie* child = children[charIndex].get();
+            if (child == nullptr)
+            {
+                child = AddChild(currChar);
+            }
+            child->AddWord(s, index + 1);
         }
+    };
+
+    unordered_set<string>  res;
+
+    void find(vector<vector<char>>& board, Trie* trie, int row, int col)
+    {
+        if (trie->wordEndsHere)
+        {
+            res.emplace(trie->word);
+            trie->wordEndsHere = false;
+        }
+
+        if (row < 0 || col < 0 || row >= board.size() || col >= board[0].size())return;
+
+
+        char boardLetter = board[row][col];
+
+        if (trie->HasChild(boardLetter) == false)return;
+
+        board[row][col] = '#';
+
+        find(board, trie->GetChild(boardLetter), row + 1, col);
+        find(board, trie->GetChild(boardLetter), row - 1, col);
+        find(board, trie->GetChild(boardLetter), row, col + 1);
+        find(board, trie->GetChild(boardLetter), row, col - 1);
+
+        board[row][col] = boardLetter;
     }
 
-private:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
 
-    unordered_map<int, int> memo;
+        vector<string> vres;
+        if (board.empty() || board[0].empty())
+        {
+            return vres;
+        }
+
+        auto root = make_unique<Trie>();
+        for (const auto& w : words)
+        {
+            root->AddWord(w);
+        }
+
+        // visited = vector<vector<bool>>(board.size(), vector<bool>(board[0].size(), false));
+        for (int row = 0; row < board.size(); ++row)
+        {
+            for (int col = 0; col < board[0].size(); ++col)
+            {
+                find(board, root.get(), row, col);
+            }
+        }
+        for (const auto& elem : res)vres.push_back(elem);
+
+        return vres;
+    }
 };
 
-void rec(string s, int start, string partial)
-{
-    if (partial.size() >= s.size())
-        cout << partial << endl;
-
-    // dog, 0, ""
-    //     dog, 1, d
-     //         dog 2, do
-    //                  dog, 3, dog
-    //          dgo, 2, dg
-     //                 dgo, 3, dgo
-    //      odg, 1, o
-    for (int i = start; i < s.size(); ++i)
-    {
-        swap(s[i], s[start]);
-        rec(s, start + 1, partial + s[start]);
-        swap(s[i], s[start]);
-    }
-}
-
-void rec2(string s, int start, string partial, vector<bool> used)
-{
-    if (partial.size() >= s.size())
-        cout << partial << endl;
-    for (int i = 0; i < s.size(); ++i)
-    {
-        if (used[i])
-            continue;
-
-        if (i > 0 && s[i] == s[i - 1] && !used[i-1])
-            continue;
-
-        used[i] = true;
-        rec2(s, start, partial + s[i], used);
-        used[i] = false;
-    }
-}
-
-void printAnagrams(string s)
-{
-    string p;
-    ranges::sort(s);
-    vector<bool> used(s.size(), false);
-    rec2(s, 0, p, used);
-}
-
-void rec(string sentence, int start, string partial, const unordered_set<string>& dict)
-{
-    if (start >= sentence.size())
-        cout << partial << endl;
-
-    string curr;
-    for (int i = start; i < sentence.size(); ++i)
-    {
-        curr += sentence[i];
-        if (dict.count(curr) > 0)
+class Solution2 {
+    class Trie {
+    public:
+        Trie* children[26]; // pointers to its substrings starting with 'a' to 'z'
+        bool leaf; // if the node is a leaf, or if there is a word stopping at here
+        int idx; // if it is a leaf, the string index of the array words
+        Trie()
         {
-            rec(sentence, i + 1, partial + " " + curr, dict);
+            this->leaf = false;
+            this->idx = 0;
+            fill_n(this->children, 26, nullptr);
         }
-    }
-}
+    };
 
-void breakinput(string sentence, vector<string> dict)
-{
-    unordered_set<string> usdict;
-    for (const auto& elem : dict)usdict.emplace(elem);
-    string partial;
-    rec(sentence, 0, partial, usdict);
-}
-
-void breakinput_bu(string sentence, vector<string> vdict)
-{
-    //vector<string> dict = { "apple", "pen", "applepen", "pine", "pineapple" };
-  //  breakinput("pineapplepenapple", dict);
-//    breakinput_bu("pineapplepenapple", dict);
-
-    unordered_set<string> dict;
-    for(const auto& elem : vdict)
-    {
-        string rentry = elem;
-        ranges::reverse(rentry);
-        dict.emplace(rentry);
-    }
-
-    vector<vector<string>> memo(sentence.size());
-    for (int i = sentence.size() - 2; i >= 0; --i)
-    {
-        string curr;
-        for (int j = i; j >= 0; --j)
-        {
-            curr += sentence[j];
-            if (dict.contains(curr))
-            {
-                string rcurr = curr;
-                ranges::reverse(rcurr);
-                memo[j].push_back(rcurr);
-            }
-        }
-    }
-    
-}
-
-vector<vector<int>> cache;
-
-
-int RecursiveNChooseK(int n, int k)
-{
-    int dim = max(n + 1, k + 1);
-    vector<vector<int>> cache(dim, vector<int>(dim, -1));
-    for (int i = 0; i < dim; ++i)
-    {
-        cache[i][0] = 1;
-    }
-    for (int i = 0; i < dim; ++i)
-    {
-        cache[i][i] = 1;
-    }
-
-    for (int i = 2; i < dim; ++i)
-    {
-        for (int j = 1; j < i; ++j)
-        {
-            cache[i][j] = cache[i - 1][j - 1] + cache[i - 1][j];
-        }
-    }
-    return cache[n][k];
-    //     k
-    // --------------------
-    // 1
-    // 01
-    // 0 1
-    // 0  1
-    // 0   1
-    // 0    1
-    // -------------------
-
-    // C(N,K) == C(N-1, K-1) + C(N-1, K)
-
-    if (n == k)return 1;
-    if (k == 0)return 1;
-    if (cache[n][k] != -1)
-    {
-        return cache[n][k];
-    }
-    
-    int res = RecursiveNChooseK(n - 1, k - 1) + RecursiveNChooseK(n - 1, k);
-    cache[n][k] = res;
-    return res;
-}
-
-
-// cost(N) = cost(N-1) + min(min(paint_a, paint_b), paint_c) where paint(n-1) 
-// cost(-1) = 0
-// paint(-1) = not painted
-
-// returns cost of painting all the houses
-
-vector<int> paintedColor;
-
-int recurse(const vector<vector<int>>& paintCost, int n, int numHouses)
-{
-    if (n >= numHouses)return 0;
-    int bestCost = INT_MAX;
-    int prevColor = -1; // not painted
-    if (n > 0)
-        prevColor = paintedColor[n - 1];
-
-    int bestColor = -1;
-    for (int i = 0; i < 3; ++i)
-    {
-        int paintCostHere = paintCost[n][i];
-        if (prevColor == i)
-        {
-            continue;
-        }
-        paintedColor[n] = i;
-        int costHere = recurse(paintCost, n + 1, numHouses) + paintCostHere;
-        if (costHere < bestCost)
-        {
-            bestColor = i;
-            bestCost = costHere;
-        }
-    }
-    paintedColor[n] = bestColor;
-    return bestCost;
-}
-
-int bu(const vector<vector<int>>& paintCost, int numHouses)
-{
-    vector<int> cache(numHouses + 1, INT_MAX);
-    paintedColor[0] = -1;
-    cache[0] = 0;
-    for (int i = numHouses ; i > 0 ; --i)
-    {
-        int prevColor = paintedColor[i - 1];
-        for (int j = 0; j < 3; ++j)
-        {
-            if (prevColor == j)
-                continue;
-            int paintCostHere = paintCost[i - 1][j] + cache[i - 1];
-            if (paintCostHere < cache[i])
-            {
-                cache[i] = paintCostHere;
-                paintedColor[i] = j;
-            }
-        }
-    }
-    return cache.back();
-}
-
-
-int recurse(int l, const vector<int>& p)
-{
-    if (l == 0)
-        return 0;
-    int best = INT_MIN;
-    for (int i = 0; i < l; ++i)
-    {
-        best = max(best, p[i] + recurse(l-i-1,p));
-    }
-    return best;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-vector<int> memo;
-
-
-int myRecurse(int l, const vector<int>& p)
-{
-    if (l == 0)
-        return 0;
-
-    if (memo[l] != -1)
-    {
-        return memo[l];
-    }
-
-    int best = -1;
-    for (int i = 1; i <= l; ++i)
-    {
-        int priceForThis = p[i - 1];
-        int priceForRest = myRecurse(l - i, p);
-        int total = priceForRest + priceForThis;
-        best = max(best, total);
-    }
-    memo[l] = best;
-    return best;
-}
-
-int bu(int l, const vector<int>& p)
-{
-    vector<int> memo(l + 1, 0);
-    memo[1] = p[0];
-    for (int i = 2; i <= l; ++i)
-    {
-        int best = INT_MIN;
-        for(int amountToCutHere = i ; amountToCutHere >= 1 ; --amountToCutHere)
-        {
-            int priceForThis = p[amountToCutHere - 1];
-            int priceForRest = memo[i - amountToCutHere];
-            int total = priceForRest + priceForThis;
-            best = max(best, total);
-        }
-        memo[i] = best;
-    }
-    return memo.back();
-}
-
-class StoneJump
-{
 public:
-
-    StoneJump()
+    void insertWords(Trie* root, vector<string>& words, int idx)
     {
-        memo = vector<int>(100, INT_MAX);
-    }
-
-    int recurse(const vector<int>& cost, int i, int x)
-    {
-        if (i < 0)
-            return INT_MAX;
-
-        if (i == 0)
-            return 0;
-
-        if (memo[i] != INT_MAX)
-            return memo[i];
-
-        // destCost(i) = cost[i] + min(recuse[i-j]) for j = 1 to X inclusive
-        int result = cost[i];
-        int best = INT_MAX;
-        for (int j = 1; j <= x; ++j)
+        int pos = 0, len = words[idx].size();
+        while (pos < len)
         {
-            int prevJumpCost = recurse(cost, i - j, x);
-            best = min(best, prevJumpCost);
+            if (nullptr == root->children[words[idx][pos] - 'a']) root->children[words[idx][pos] - 'a'] = new Trie();
+            root = root->children[words[idx][pos++] - 'a'];
         }
-        best += cost[i];
-
-        memo[i] = best;
-
-        return best;
+        root->leaf = true;
+        root->idx = idx;
     }
 
-    int bu(const vector<int>& v, int x)
+    Trie* buildTrie(vector<string>& words)
     {
-        vector<int> memo(v.size() + x, INT_MAX);
-        memo[x] = 0;
-        for (int i = x + 1; i < v.size()+ x; ++i) // N
+        Trie* root = new Trie();
+        int i;
+        for (i = 0; i < words.size(); i++) insertWords(root, words, i);
+        return root;
+    }
+
+    void checkWords(vector<vector<char>>& board, int i, int j, int row, int col, Trie* root, vector<string>& res, vector<string>& words)
+    {
+        char temp;
+        if (board[i][j] == 'X') return; // visited before;
+        if (nullptr == root->children[board[i][j] - 'a']) return; // no string with such prefix
+        else
         {
-            int best = INT_MAX;
-            for (int j = 1; j <= x; ++j) // X
+            temp = board[i][j];
+            if (root->children[temp - 'a']->leaf)  // if it is a leaf
             {
-                int prevJumpCost = memo[i - j];
-                best = min(prevJumpCost, best);
+                res.push_back(words[root->children[temp - 'a']->idx]);
+                root->children[temp - 'a']->leaf = false; // set to false to indicate that we found it already
             }
-            memo[i] = best + v[i-x];
+            board[i][j] = 'X'; //mark the current position as visited
+// check all the possible neighbors
+            if (i > 0) checkWords(board, i - 1, j, row, col, root->children[temp - 'a'], res, words);
+            if ((i + 1) < row) checkWords(board, i + 1, j, row, col, root->children[temp - 'a'], res, words);
+            if (j > 0) checkWords(board, i, j - 1, row, col, root->children[temp - 'a'], res, words);
+            if ((j + 1) < col)  checkWords(board, i, j + 1, row, col, root->children[temp - 'a'], res, words);
+            board[i][j] = temp; // recover the current position
         }
-        return memo.back();
     }
 
-private:
-    vector<int> memo;
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        vector<string> res;
+        int row = board.size();
+        if (0 == row) return res;
+        int col = board[0].size();
+        if (0 == col) return res;
+        int wordCount = words.size();
+        if (0 == wordCount) return res;
 
+        Trie* root = buildTrie(words);
+
+        int i, j;
+        for (i = 0; i < row; i++)
+        {
+            for (j = 0; j<col; j++)
+            {
+                checkWords(board, i, j, row, col, root, res, words);
+            }
+        }
+        return res;
+    }
 };
-
-int countbitsrow(int x)
-{
-    int best = 0;
-    int currRun = 0;
-    while (x)
-    {
-        if (x & 1)
-        {
-            currRun++;
-            best = max(best, currRun);
-        }
-        else
-        {
-            currRun = 0;
-        }
-        x = x >> 1;
-    }
-    return best;
-}
-
-int multitasking(vector<int>& v)
-{
-    int timeLastInsertion = 0;
-    unordered_map<int, int> startTimes;
-
-    startTimes[v[0]] = 0;
-
-    for (int i = 1; i < v.size(); ++i)
-    {
-        int taskNo = v[i];
-        auto iter = startTimes.find(taskNo);
-        if (iter == startTimes.end())
-        {
-            startTimes[taskNo] = timeLastInsertion + 1;
-        }
-        else
-        {
-            startTimes[taskNo] = max(startTimes[taskNo] + 3, timeLastInsertion + 1);
-        }
-        timeLastInsertion = startTimes[taskNo];
-    }
-    int ans = 0;
-    for (const auto& elem : startTimes)
-    {
-        ans = max(ans, elem.second + 2);
-    }
-    ans--;
-    return ans;
-}
-
-uint32_t MySwapEndian(uint32_t x)
-{
-    uint32_t a, b, c, d;
-    a = x << 24;
-    a &= 0xFF000000;
-    b = x << 8;
-    b &= 0x00FF0000;
-    c = x >> 8;
-    c &= 0x0000FF00;
-    d = x >> 24;
-    d &= 0x000000FF;
-
-    return a|b|c|d;
-}
-
 int main()
 {
-    auto x = SwapEndianness(9);
-    assert(x == MySwapEndian(9));
-
+    Timer t;
+    t.Start();
+    Solution s;
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+    vector<vector<char>> board;
+    board.resize(12);
+    for (int i = 0; i < 12; ++i)
+    {
+        for (int j = 0; j < 12; ++j)
+        {
+            board[i].push_back('a');
+        }
+    }
+    vector<string> words = vector<string>{ "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa" };
+    vector<string> res = s.findWords(board, words);
+    end = std::chrono::system_clock::now();
+    //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    //std::chrono::duration<double> elapsed_seconds = end - start;
+    //  cout  << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    t.Stop();
+    cout << t.GetElapsedSeconds() << endl;
     return 0;
 };
 
