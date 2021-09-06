@@ -229,18 +229,46 @@ T my_upper_bound(T b, T e, int target)
 
 double MySqrt(double x)
 {
-    assert(x >= 0);
-    return -1;
+    double l = 1.0;
+    double r = x;
+
+    if (x < 1)
+    {
+        l = 0.0;
+        r = 1.0;
+    }
+
+    while (true)
+    {
+        const double possibleAnswer = l + (r - l) / 2.0;
+        const double testingAnswerAccuracy = possibleAnswer * possibleAnswer;
+        const double diff = x - testingAnswerAccuracy;
+        if (abs(diff) < 0.0001)
+            return possibleAnswer;
+        else if (diff > 0)
+        {
+            l = possibleAnswer + 0.0001;
+        }
+        else
+        {
+            r = possibleAnswer - 0.0001;
+        }
+    }
 }
 
 void testMySqrt()
 {
     RandomNumberGenerator rng;
-    while (true)
-        cout << rng.GetRandomInt(0, 2) << endl;;
-
-
-
+    constexpr int numIter = 1000000;
+    for (int i = 0; i < numIter; ++i)
+    {
+        double squaredValue = rng.GetRandomDouble(0, 100000.0);
+        double actual = sqrt(squaredValue);
+        double test = MySqrt(squaredValue);
+        double difference = abs(actual - test);
+        assert(difference < 0.0001);
+    }
+    cout << "Done" << endl;
 }
 
 int main()
