@@ -30,6 +30,10 @@ import ReaderWriter;
 #include "LinearAlgebra.h"
 #include "Matrix4x4.h"
 #include "Endianness.h"
+#include "BasicCalculator.h"
+#include "SpaceshipOperator.h"
+#include "TopologicalSort.h"
+#include "RandomNumberGenerator.h"
 
 using namespace std;
 
@@ -120,220 +124,61 @@ void philo(int id)
     }
 }
 
-class Solution {
-public:
 
-    struct Trie
+
+double MySqrt(double x)
+{
+    double l = 1.0;
+    double r = x;
+
+    if (x < 1)
     {
-        Trie() {
-            fill(children.begin(), children.end(), nullptr);
-        }
-        bool wordEndsHere = false;
-        string word;
-        array<unique_ptr<Trie>, 26> children;
-
-        Trie* AddChild(char c)
-        {
-            int index = c - 'a';
-            children[index] = make_unique<Trie>();
-            return children[index].get();
-        }
-
-        bool HasChild(char c)const
-        {
-            if (c == '#')
-                return false;
-
-            int charIndex = c - 'a';
-            return children[charIndex].get() != nullptr;
-        }
-
-        Trie* GetChild(char c)const
-        {
-
-            int charIndex = c - 'a';
-            return children[charIndex].get();
-        }
-
-        void AddWord(const string& s, int index = 0)
-        {
-            if (index >= s.size())
-            {
-                wordEndsHere = true;
-                word = s;
-                return;
-            }
-
-            char currChar = s.at(index);
-            int charIndex = currChar - 'a';
-            Trie* child = children[charIndex].get();
-            if (child == nullptr)
-            {
-                child = AddChild(currChar);
-            }
-            child->AddWord(s, index + 1);
-        }
-    };
-
-    unordered_set<string>  res;
-
-    void find(vector<vector<char>>& board, Trie* trie, int row, int col)
-    {
-        if (trie->wordEndsHere)
-        {
-            res.emplace(trie->word);
-            trie->wordEndsHere = false;
-        }
-
-        if (row < 0 || col < 0 || row >= board.size() || col >= board[0].size())return;
-
-
-        char boardLetter = board[row][col];
-
-        if (trie->HasChild(boardLetter) == false)return;
-
-        board[row][col] = '#';
-
-        find(board, trie->GetChild(boardLetter), row + 1, col);
-        find(board, trie->GetChild(boardLetter), row - 1, col);
-        find(board, trie->GetChild(boardLetter), row, col + 1);
-        find(board, trie->GetChild(boardLetter), row, col - 1);
-
-        board[row][col] = boardLetter;
+        l = 0.0;
+        r = 1.0;
     }
 
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-
-        vector<string> vres;
-        if (board.empty() || board[0].empty())
-        {
-            return vres;
-        }
-
-        auto root = make_unique<Trie>();
-        for (const auto& w : words)
-        {
-            root->AddWord(w);
-        }
-
-        // visited = vector<vector<bool>>(board.size(), vector<bool>(board[0].size(), false));
-        for (int row = 0; row < board.size(); ++row)
-        {
-            for (int col = 0; col < board[0].size(); ++col)
-            {
-                find(board, root.get(), row, col);
-            }
-        }
-        for (const auto& elem : res)vres.push_back(elem);
-
-        return vres;
-    }
-};
-
-class Solution2 {
-    class Trie {
-    public:
-        Trie* children[26]; // pointers to its substrings starting with 'a' to 'z'
-        bool leaf; // if the node is a leaf, or if there is a word stopping at here
-        int idx; // if it is a leaf, the string index of the array words
-        Trie()
-        {
-            this->leaf = false;
-            this->idx = 0;
-            fill_n(this->children, 26, nullptr);
-        }
-    };
-
-public:
-    void insertWords(Trie* root, vector<string>& words, int idx)
+    while (true)
     {
-        int pos = 0, len = words[idx].size();
-        while (pos < len)
+        const double possibleAnswer = l + (r - l) / 2.0;
+        const double testingAnswerAccuracy = possibleAnswer * possibleAnswer;
+        const double diff = x - testingAnswerAccuracy;
+        if (abs(diff) < 0.0001)
+            return possibleAnswer;
+        else if (diff > 0)
         {
-            if (nullptr == root->children[words[idx][pos] - 'a']) root->children[words[idx][pos] - 'a'] = new Trie();
-            root = root->children[words[idx][pos++] - 'a'];
+            l = possibleAnswer + 0.0001;
         }
-        root->leaf = true;
-        root->idx = idx;
-    }
-
-    Trie* buildTrie(vector<string>& words)
-    {
-        Trie* root = new Trie();
-        int i;
-        for (i = 0; i < words.size(); i++) insertWords(root, words, i);
-        return root;
-    }
-
-    void checkWords(vector<vector<char>>& board, int i, int j, int row, int col, Trie* root, vector<string>& res, vector<string>& words)
-    {
-        char temp;
-        if (board[i][j] == 'X') return; // visited before;
-        if (nullptr == root->children[board[i][j] - 'a']) return; // no string with such prefix
         else
         {
-            temp = board[i][j];
-            if (root->children[temp - 'a']->leaf)  // if it is a leaf
-            {
-                res.push_back(words[root->children[temp - 'a']->idx]);
-                root->children[temp - 'a']->leaf = false; // set to false to indicate that we found it already
-            }
-            board[i][j] = 'X'; //mark the current position as visited
-// check all the possible neighbors
-            if (i > 0) checkWords(board, i - 1, j, row, col, root->children[temp - 'a'], res, words);
-            if ((i + 1) < row) checkWords(board, i + 1, j, row, col, root->children[temp - 'a'], res, words);
-            if (j > 0) checkWords(board, i, j - 1, row, col, root->children[temp - 'a'], res, words);
-            if ((j + 1) < col)  checkWords(board, i, j + 1, row, col, root->children[temp - 'a'], res, words);
-            board[i][j] = temp; // recover the current position
+            r = possibleAnswer - 0.0001;
         }
     }
+}
 
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        vector<string> res;
-        int row = board.size();
-        if (0 == row) return res;
-        int col = board[0].size();
-        if (0 == col) return res;
-        int wordCount = words.size();
-        if (0 == wordCount) return res;
-
-        Trie* root = buildTrie(words);
-
-        int i, j;
-        for (i = 0; i < row; i++)
-        {
-            for (j = 0; j<col; j++)
-            {
-                checkWords(board, i, j, row, col, root, res, words);
-            }
-        }
-        return res;
+void testMySqrt()
+{
+    RandomNumberGenerator rng;
+    constexpr int numIter = 1000000;
+    for (int i = 0; i < numIter; ++i)
+    {
+        double squaredValue = rng.GetRandomDouble(0, 100000.0);
+        double actual = sqrt(squaredValue);
+        double test = MySqrt(squaredValue);
+        double difference = abs(actual - test);
+        assert(difference < 0.0001);
     }
-};
+    cout << "Done" << endl;
+}
+
 int main()
 {
-    Timer t;
-    t.Start();
-    Solution s;
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
-    vector<vector<char>> board;
-    board.resize(12);
-    for (int i = 0; i < 12; ++i)
-    {
-        for (int j = 0; j < 12; ++j)
-        {
-            board[i].push_back('a');
-        }
-    }
-    vector<string> words = vector<string>{ "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa" };
-    vector<string> res = s.findWords(board, words);
-    end = std::chrono::system_clock::now();
-    //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-    //std::chrono::duration<double> elapsed_seconds = end - start;
-    //  cout  << "elapsed time: " << elapsed_seconds.count() << "s\n";
-    t.Stop();
-    cout << t.GetElapsedSeconds() << endl;
+    Timer timer;
+    timer.Start();
+
+    testMySqrt();
+
+    timer.Stop();
+    std::cout << "Execution took " << timer.GetElapsedMilliseconds() << " ms" << std::endl;
     return 0;
 };
 
