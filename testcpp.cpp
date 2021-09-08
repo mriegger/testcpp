@@ -34,6 +34,7 @@ import ReaderWriter;
 #include "SpaceshipOperator.h"
 #include "TopologicalSort.h"
 #include "RandomNumberGenerator.h"
+#include "IntersectionTests.h"
 
 using namespace std;
 
@@ -175,7 +176,8 @@ int main()
     Timer timer;
     timer.Start();
 
-    testMySqrt();
+    IntersectionTests tests;
+    tests.Test();
 
     timer.Stop();
     std::cout << "Execution took " << timer.GetElapsedMilliseconds() << " ms" << std::endl;
