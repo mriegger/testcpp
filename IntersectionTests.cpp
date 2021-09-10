@@ -22,10 +22,48 @@ float3 IntersectionTests::RaySphere(const float3 rayStart, const float3 rayDirec
 	return rayStart + rayDirection * t;
 }
 
+bool IntersectionTests::DoesRayHitAABB(const float3 rayStart, const float3 rayDirection, const float3 aabbMin, const float3 aabbMax)
+{
+	// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
+
+	// Ray-plane intersection against the two planes oriented facing the x-axis
+	float tmin = (aabbMin.x - rayStart.x) / rayDirection.x;
+	float tmax = (aabbMax.x - rayStart.x) / rayDirection.x;
+
+	if (tmin > tmax) std::swap(tmin, tmax);
+
+	float tymin = (aabbMin.y - rayStart.y) / rayDirection.y;
+	float tymax = (aabbMax.y - rayStart.y) / rayDirection.y;
+
+	if (tymin > tymax) std::swap(tymin, tymax);
+
+	// if the closest near hit on a plane is further than the furthest hit on the other plane, then we missed the box
+	if ((tmin > tymax) || (tymin > tmax))
+		return false;
+
+	// choose the furthest near and the nearest far hits
+	tmin = std::max(tmin, tymin);
+	tmax = std::min(tymax, tmax);
+
+	float tzmin = (aabbMin.z - rayStart.z) / rayDirection.z;
+	float tzmax = (aabbMax.z - rayStart.z) / rayDirection.z;
+
+	if (tzmin > tzmax) std::swap(tzmin, tzmax);
+
+	if ((tmin > tzmax) || (tzmin > tmax))
+		return false;
+
+	tmin = std::max(tzmin, tmin);
+	tmax = std::min(tmax, tzmax);
+
+	return true;
+}
+
 void IntersectionTests::Test()
 {
 	TestRayPlane();
 	TestRaySphere();
+	TestRayAABB();
 }
 
 void IntersectionTests::TestRayPlane()
@@ -50,4 +88,14 @@ void IntersectionTests::TestRaySphere()
 	const float3 hitPoint = RaySphere(rayStart, rayDir, spherePos, sphereRadius);
 	const float3 expectedHitPoint(-sphereRadius, 0, 0);
 	assert(length(expectedHitPoint - hitPoint) < 0.0001f);
+}
+
+void IntersectionTests::TestRayAABB()
+{
+	const float3 aabbMin(-10, -10, -10);
+	const float3 aabbMax(10, 10, 10);
+
+	assert(DoesRayHitAABB(float3(-20,0,0), float3(1,0,0), aabbMin, aabbMax));
+	assert(!DoesRayHitAABB(float3(-20, -11, 0), float3(1, 0, 0), aabbMin, aabbMax));
+	assert(!DoesRayHitAABB(float3(-15, -15, 0), normalize(float3(10, 1, 0)), aabbMin, aabbMax));
 }
