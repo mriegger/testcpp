@@ -25,6 +25,9 @@ public:
 
         result = c.Calc("(5+6)-(9+2)");
         assert(result == 0);
+
+        result = c.Calc("-(5-(9-9-(-5-4))-189)");
+        assert(result == 193);
     }
 
 private:
@@ -46,44 +49,60 @@ private:
         }
     }
 
-    int recurse()
+    static int PopAddAdditionStack(std::stack<int>& s)
     {
         int res = 0;
+        while (!s.empty())
+        {
+            res += s.top();
+            s.pop();
+        }
+        return res;
+    }
+
+    int recurse()
+    {
+        std::stack<int> additionStack;
+        int leftNum = 0;
         char op = '+';
-        int currNum = 0;
+        int rightNum = 0;
         while(m_iter < m_s.size())
         {
             if (isdigit(m_s[m_iter]))
             {
-                currNum = currNum * 10 + m_s[m_iter] - '0';
+                rightNum = rightNum * 10 + m_s[m_iter] - '0';
             }
             else if (m_s[m_iter] == '(')
             {
                 m_iter++;
                 auto x = recurse();
-                res = ApplyOp(res, x, op);
+                leftNum = ApplyOp(leftNum, x, op);
             }
             else if (m_s[m_iter] == '+')
             {
-                res = ApplyOp(res, currNum, op);
+                additionStack.push(ApplyOp(leftNum, rightNum, op));
+                leftNum = 0;
                 op = '+';
-                currNum = 0;
+                rightNum = 0;
             }
             else if (m_s[m_iter] == '-')
             {
-                res = ApplyOp(res, currNum, op);
+                additionStack.push(ApplyOp(leftNum, rightNum, op));
                 op = '-';
-                currNum = 0;
+                leftNum = 0;
+                rightNum = 0;
             }
             else if (m_s[m_iter] == ')')
             {
-                res = ApplyOp(res, currNum, op);
-                return res;
+                leftNum = ApplyOp(leftNum, rightNum, op);
+                return leftNum + PopAddAdditionStack(additionStack);
             }
             m_iter++;
         }
-        res = ApplyOp(res, currNum, op);
-        return res;
+
+        // reached the end of the string
+        leftNum = ApplyOp(leftNum, rightNum, op);
+        return leftNum + PopAddAdditionStack(additionStack);
     }
 
     std::string m_s;
