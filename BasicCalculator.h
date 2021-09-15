@@ -9,11 +9,12 @@ class BasicCalculator
 {
 public:
 
-    long long Calc(const std::string& s)
+    int Calc(const std::string& s)
     {
+        m_iter = 0;
         m_s = s;
-        auto x = recurse(0);
-        return x.first;
+        auto x = recurse();
+        return x;
     }
 
     static void Test()
@@ -28,51 +29,63 @@ public:
 
 private:
 
-    static long long ApplyOp(long long a, long long b, char op)
+    static int ApplyOp(int a, int b, char op)
     {
         if (op == '+')
+        {
             return a + b;
-        else return a - b;
+        }
+        else if (op == '-')
+        {
+            return a - b;
+        }
+        else
+        {
+            assert(0);
+            return INT_MAX;
+        }
     }
 
-    std::pair<long long, long long> recurse(long long loc)
+    int recurse()
     {
-        long long res = 0;
+        int res = 0;
         char op = '+';
-        long long currNum = 0;
-        for (long long i = loc; i < m_s.size(); ++i)
+        int currNum = 0;
+        while(m_iter < m_s.size())
         {
-            if (isdigit(m_s[i]))
+            if (isdigit(m_s[m_iter]))
             {
-                currNum = currNum * 10 + m_s[i] - '0';
+                currNum = currNum * 10 + m_s[m_iter] - '0';
             }
-            else if (m_s[i] == '(')
+            else if (m_s[m_iter] == '(')
             {
-                auto x = recurse(i + 1);
-                res = ApplyOp(res, x.first, op);
-                i = x.second;
+                m_iter++;
+                auto x = recurse();
+                res = ApplyOp(res, x, op);
             }
-            else if (m_s[i] == '+')
+            else if (m_s[m_iter] == '+')
             {
                 res = ApplyOp(res, currNum, op);
                 op = '+';
                 currNum = 0;
             }
-            else if (m_s[i] == '-')
+            else if (m_s[m_iter] == '-')
             {
                 res = ApplyOp(res, currNum, op);
                 op = '-';
                 currNum = 0;
             }
-            else if (m_s[i] == ')')
+            else if (m_s[m_iter] == ')')
             {
                 res = ApplyOp(res, currNum, op);
-                return std::make_pair(res, i);
+                return res;
             }
+            m_iter++;
         }
         res = ApplyOp(res, currNum, op);
-        return std::make_pair(res, m_s.size());
+        return res;
     }
 
     std::string m_s;
+    int m_iter = 0;
 };

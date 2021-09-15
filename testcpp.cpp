@@ -177,7 +177,7 @@ int main()
     Timer timer;
     timer.Start();
 
-    BinarySearch::Test();
+    BasicCalculator::Test();
 
     timer.Stop();
     std::cout << "Execution took " << timer.GetElapsedMilliseconds() << " ms" << std::endl;
