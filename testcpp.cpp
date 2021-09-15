@@ -24,6 +24,7 @@ import ReaderWriter;
 #include <unordered_set>
 #include <atomic>
 #include "hlsl.h"
+#include "BinarySearch.h"
 #include "TextureSampling.h"
 #include "DiningPhilosophers.h"
 #include "AsyncLinkedListTester.h"
@@ -176,8 +177,7 @@ int main()
     Timer timer;
     timer.Start();
 
-    IntersectionTests tests;
-    tests.Test();
+    BinarySearch::Test();
 
     timer.Stop();
     std::cout << "Execution took " << timer.GetElapsedMilliseconds() << " ms" << std::endl;
