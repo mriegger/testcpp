@@ -18,17 +18,11 @@ public:
 		{
 			const T mid = left + (right - left) / 2;
 			const bool comparesGreater = v[mid] < target;
-			const bool comparesLess = target < v[mid];
-
-			if (comparesLess && comparesGreater)
-			{
-				return v.begin() + left;
-			}
-			else if (comparesGreater) 
+			if (comparesGreater) 
 			{
 				left = mid + 1;
 			}
-			else // target < mid
+			else 
 			{
 				best = mid;
 				right = mid - 1;
