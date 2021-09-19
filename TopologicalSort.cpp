@@ -46,6 +46,7 @@ void TopologicalSort::Dfs(const char name, std::unordered_set<char>& visited, st
 		if (!visited.count(c))
 			Dfs(c, visited, result);
 	}
+	// postfix order! topo is just dfs vising children first
 	result += name;
 }
 
