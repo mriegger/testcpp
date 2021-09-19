@@ -20,7 +20,11 @@ public:
     static void Test()
     {
         BasicCalculator c;
-        auto result = c.Calc("-(5+4)");
+        int result;
+        result = c.Calc("2*3*4");
+        assert(result == 24);
+
+        result = c.Calc("-(5+4)");
         assert(result == -9);
 
         result = c.Calc("(5+6)-(9+2)");
@@ -28,81 +32,71 @@ public:
 
         result = c.Calc("-(5-(9-9-(-5-4))-189)");
         assert(result == 193);
+
+        result = c.Calc("-(5-(5+6-9*9*2-4-(-5*4))-189)");
+        assert(result == 49);
     }
 
 private:
 
-    static int ApplyOp(int a, int b, char op)
-    {
-        if (op == '+')
-        {
-            return a + b;
-        }
-        else if (op == '-')
-        {
-            return a - b;
-        }
-        else
-        {
-            assert(0);
-            return INT_MAX;
-        }
-    }
-
-    static int PopAddAdditionStack(std::stack<int>& s)
-    {
-        int res = 0;
-        while (!s.empty())
-        {
-            res += s.top();
-            s.pop();
-        }
-        return res;
-    }
-
     int recurse()
     {
-        std::stack<int> additionStack;
+        int sum = 0;
         int leftNum = 0;
+        int currNum = 0;
         char op = '+';
-        int rightNum = 0;
-        while(m_iter < m_s.size())
-        {
-            if (isdigit(m_s[m_iter]))
+        while (m_iter < m_s.size())
+        {         
+            const char ch = m_s[m_iter];
+            if (ch == ')')
             {
-                rightNum = rightNum * 10 + m_s[m_iter] - '0';
+                return sum + leftNum;
             }
-            else if (m_s[m_iter] == '(')
+            else if (isdigit(ch) || ch == '(')
             {
-                m_iter++;
-                auto x = recurse();
-                leftNum = ApplyOp(leftNum, x, op);
+                if (ch == '(')
+                {
+                    m_iter++;
+                    currNum = recurse();
+                }
+                else
+                {
+                    currNum *= 10;
+                    currNum += ch - '0';
+                }
+
+                // peek at the next character to see if we are done parsing the current number
+                if (m_iter + 1 == (int)m_s.size() || !isdigit(m_s[m_iter + 1]))
+                {
+                    if (op == '*')
+                    {
+                        leftNum *= currNum;
+                    }
+                    else if (op == '/')
+                    {
+                        leftNum /= currNum;
+                    }
+                    else if (op == '+')
+                    {
+                        sum += leftNum;
+                        leftNum = currNum;
+                    }
+                    else // op == '-'
+                    {
+                        sum += leftNum;
+                        leftNum = -currNum;
+                    }
+                    currNum = 0;
+                }
             }
-            else if (m_s[m_iter] == '+')
+            else
             {
-                additionStack.push(ApplyOp(leftNum, rightNum, op));
-                leftNum = 0;
-                op = '+';
-                rightNum = 0;
-            }
-            else if (m_s[m_iter] == '-')
-            {
-                additionStack.push(ApplyOp(leftNum, rightNum, op));
-                op = '-';
-                leftNum = 0;
-                rightNum = 0;
-            }
-            else if (m_s[m_iter] == ')')
-            {
-                leftNum = ApplyOp(leftNum, rightNum, op);
-                return leftNum + PopAddAdditionStack(additionStack);
+                op = ch;
             }
             m_iter++;
         }
-
-        // reached the end of the string
-        leftNum = ApplyOp(leftNum, rightNum, op);
-        return leftNum + PopAddAdditionStack(additionStack);
+        sum += leftNum;
+        return sum;
     }
 
     std::string m_s;

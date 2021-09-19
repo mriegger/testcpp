@@ -126,7 +126,29 @@ void philo(int id)
     }
 }
 
-
+int MySqrt(unsigned long long xx)
+{
+    unsigned long long l = 0;
+    unsigned long long r = xx;
+    while (l <= r)
+    {
+        unsigned long long x = l + (r - l) / 2;
+        unsigned long long possXX = x * x;
+        if (possXX == xx)
+        {
+            return x;
+        }
+        else if (possXX > xx)
+        {
+            r = x - 1;
+        }
+        else
+        {
+            l = x + 1;
+        }
+    }
+    return r;
+}
 
 double MySqrt(double x)
 {
@@ -171,16 +193,77 @@ void testMySqrt()
     }
     cout << "Done" << endl;
 }
+//
+//class Solution {
+//public:
+//    int calculate(string s)
+//    {
+//        int length = s.length();
+//        if (length == 0) return 0;
+//        int currentNumber = 0, lastNumber = 0, result = 0;
+//        char sign = '+';
+//        for (int i = 0; i < length; i++) {
+//            char currentChar = s[i];
+//            if (isdigit(currentChar)) {
+//                currentNumber = (currentNumber * 10) + (currentChar - '0');
+//            }
+//            if (!isdigit(currentChar) && !iswspace(currentChar) || i == length - 1) {
+//                if (sign == '+' || sign == '-') {
+//                    result += lastNumber;
+//                    lastNumber = (sign == '+') ? currentNumber : -currentNumber;
+//                }
+//                else if (sign == '*') {
+//                    lastNumber = lastNumber * currentNumber;
+//                }
+//                else if (sign == '/') {
+//                    lastNumber = lastNumber / currentNumber;
+//                }
+//                sign = currentChar;
+//                currentNumber = 0;
+//            }
+//        }
+//        result += lastNumber;
+//        return result;
+//    }
+//};
+class Solution {
+public:
+    int calculate(string s)
+    {
+        int length = s.length();
+        if (length == 0) return 0;
+        int currentNumber = 0, lastNumber = 0, result = 0;
+        char sign = '+';
+        for (int i = 0; i < length; i++) {
+            char currentChar = s[i];
+            if (isdigit(currentChar)) {
+                currentNumber = (currentNumber * 10) + (currentChar - '0');
+            }
+            if (!isdigit(currentChar) && !iswspace(currentChar) || i == length - 1) {
+                if (sign == '+' || sign == '-') 
+                {
+                }
+                else if (sign == '*') 
+                {
+                }
+                else if (sign == '/') 
+                {
+
+                }
+            }
+        }
+        result += lastNumber;
+        return result;
+    }
+};
+
 
 int main()
 {
-    Timer timer;
-    timer.Start();
+    BasicCalculator bc;
+    int x = bc.Calc("5+2*3");
+    bc.Test();
 
-    BasicCalculator::Test();
-
-    timer.Stop();
-    std::cout << "Execution took " << timer.GetElapsedMilliseconds() << " ms" << std::endl;
     return 0;
 };
 
