@@ -34,6 +34,7 @@ import ReaderWriter;
 #include "BasicCalculator.h"
 #include "SpaceshipOperator.h"
 #include "TopologicalSort.h"
+#include "DivideIntegers.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
 
@@ -260,9 +261,7 @@ public:
 
 int main()
 {
-    BasicCalculator bc;
-    int x = bc.Calc("5+2*3");
-    bc.Test();
+    DivideIntegers::Test();
 
     return 0;
 };

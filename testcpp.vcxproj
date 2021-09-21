@@ -176,6 +176,7 @@
     <ClInclude Include="DiningPhilosophers.h" />
     <ClInclude Include="Endianness.h" />
     <ClInclude Include="half.h" />
+    <ClInclude Include="DivideIntegers.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="IntersectionTests.h" />
     <ClInclude Include="LinearAlgebra.h" />
