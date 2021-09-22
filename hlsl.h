@@ -796,7 +796,23 @@ struct float4x4
     }
 };
 
+inline float3 mul(const float3x3 mat, const float3 v)
+{
+    float3 res;
+    res.x = dot(mat.m_rows[0], v);
+    res.y = dot(mat.m_rows[1], v);
+    res.z = dot(mat.m_rows[2], v);
+    return res;
+}
 
+inline float3 mul(const float3 v, const float3x3 mat)
+{
+    float3 res;
+    res.x = v.x * mat[0][0] + v.y * mat[1][0] + v.z * mat[2][0];
+    res.y = v.x * mat[0][1] + v.y * mat[1][1] + v.z * mat[2][1];
+    res.z = v.x * mat[0][2] + v.y * mat[1][2] + v.z * mat[2][2];
+    return res;
+}
 
 inline float4 mul(const float4x4 mat, const float4 v)
 {
