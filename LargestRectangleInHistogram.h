@@ -4,6 +4,7 @@
 #include <cassert>
 #include <vector>
 
+// https://leetcode.com/problems/largest-rectangle-in-histogram/
 class LargestRectangleInHistogram
 {
 public:
