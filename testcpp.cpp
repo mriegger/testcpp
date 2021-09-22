@@ -36,6 +36,7 @@ import ReaderWriter;
 #include "TopologicalSort.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
+#include "LargestRectangleInHistogram.h"
 
 using namespace std;
 
@@ -260,9 +261,8 @@ public:
 
 int main()
 {
-    BasicCalculator bc;
-    int x = bc.Calc("5+2*3");
-    bc.Test();
+    LargestRectangleInHistogram l;
+    l.Test();
 
     return 0;
 };
