@@ -27,6 +27,7 @@ import ReaderWriter;
 #include "BinarySearch.h"
 #include "TextureSampling.h"
 #include "DiningPhilosophers.h"
+#include "DivideIntegers.h"
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
 #include "Matrix4x4.h"
@@ -37,7 +38,6 @@ import ReaderWriter;
 #include "DivideIntegers.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
-#include "LargestRectangleInHistogram.h"
 
 using namespace std;
 
@@ -259,11 +259,38 @@ public:
     }
 };
 
+float3x3 MatrixFromQuaternion(float4 quaternion)
+{
+    float tx = quaternion.x * 2.0f;
+    float ty = quaternion.y * 2.0f;
+    float tz = quaternion.z * 2.0f;
+    float twx = quaternion.w * tx;
+    float twy = quaternion.w * ty;
+    float twz = quaternion.w * tz;
+    float txy = quaternion.x * ty;
+    float txx = quaternion.x * tx;
+    float txz = quaternion.x * tz;
+    float tyy = quaternion.y * ty;
+    float tyz = quaternion.y * tz;
+    float tzz = quaternion.z * tz;
+
+    float3x3 m = float3x3(1.0f - tyy - tzz, txy - twz, txz + twy,
+        txy + twz, 1.0f - txx - tzz, tyz - twx,
+        txz - twy, tyz + twx, 1.0f - txx - tyy);
+    return m;
+}
+
 
 int main()
 {
-    LargestRectangleInHistogram l;
-    l.Test();
+    const float4 qrot90 = float4(0, 0, 0.70711, 0.70711);
+    float3x3 mat = MatrixFromQuaternion(qrot90);
+    mat = transpose(mat);
+    float3 z = mat[2];
+    float3 x = mat[0];
+    float3 y = mat[1];
+
+ //6   float3 v = mul(v, mat);
 
     return 0;
 };

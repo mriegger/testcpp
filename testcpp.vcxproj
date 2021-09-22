@@ -179,7 +179,6 @@
     <ClInclude Include="DivideIntegers.h" />
     <ClInclude Include="hlsl.h" />
     <ClInclude Include="IntersectionTests.h" />
-    <ClInclude Include="LargestRectangleInHistogram.h" />
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="RandomNumberGenerator.h" />

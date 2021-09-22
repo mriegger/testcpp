@@ -119,9 +119,6 @@
     <ClInclude Include="BinarySearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LargestRectangleInHistogram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DivideIntegers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
