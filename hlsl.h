@@ -746,6 +746,44 @@ inline int3 operator+(const uint3 a, const int3 b)
     return res;
 }
 
+struct float3x3
+{
+    std::array<float3, 3> m_rows;
+
+    float3x3() = default;
+    float3x3(const float a, const float b, const float c,
+             const float d, const float e, const float f,
+             const float g, const float h, const float i)
+    {
+        m_rows[0][0] = a;
+        m_rows[0][1] = b;
+        m_rows[0][2] = c;
+
+        m_rows[1][0] = d;
+        m_rows[1][1] = e;
+        m_rows[1][2] = f;
+
+        m_rows[2][0] = g;
+        m_rows[2][1] = h;
+        m_rows[2][2] = i;
+    }
+
+    void SetRow(int row, float a, float b, float c)
+    {
+        assert(row >= 0 && row < 3);
+        m_rows[row] = float3(a, b, c);
+    }
+
+    float3& operator[](std::size_t idx)
+    {
+        return m_rows[idx];
+    }
+
+    const float3& operator[](std::size_t idx) const
+    {
+        return m_rows[idx];
+    }
+};
 
 struct float4x4
 {
@@ -757,6 +795,8 @@ struct float4x4
         m_rows[row] = float4(a,b,c,d);
     }
 };
+
+
 
 inline float4 mul(const float4x4 mat, const float4 v)
 {
