@@ -939,6 +939,19 @@ inline void GroupMemoryBarrier() { }
 // and all threads in the group have reached this call.
 inline void GroupMemoryBarrierWithGroupSync() { }
 
+inline float3x3 transpose(const float3x3& m)
+{
+    float3x3 res{};
+    for (int row = 0; row < 3; ++row)
+    {
+        for (int col = 0; col < 3; ++col)
+        {
+            res.m_rows[col][row] = m.m_rows[row][col];
+        }
+    }
+    return res;
+}
+
 inline float4x4 transpose(const float4x4& m)
 {
     float4x4 res{};

@@ -27,6 +27,7 @@ import ReaderWriter;
 #include "BinarySearch.h"
 #include "TextureSampling.h"
 #include "DiningPhilosophers.h"
+#include "DivideIntegers.h"
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
 #include "Matrix4x4.h"
@@ -282,10 +283,14 @@ float3x3 MatrixFromQuaternion(float4 quaternion)
 
 int main()
 {
-    float3x3 mat = MatrixFromQuaternion(float4(0,0,0,1));
+    const float4 qrot90 = float4(0, 0, 0.70711, 0.70711);
+    float3x3 mat = MatrixFromQuaternion(qrot90);
+    mat = transpose(mat);
     float3 z = mat[2];
     float3 x = mat[0];
     float3 y = mat[1];
+
+ //6   float3 v = mul(v, mat);
 
     return 0;
 };
