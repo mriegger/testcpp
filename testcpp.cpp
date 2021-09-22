@@ -34,6 +34,7 @@ import ReaderWriter;
 #include "BasicCalculator.h"
 #include "SpaceshipOperator.h"
 #include "TopologicalSort.h"
+#include "DivideIntegers.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
 #include "LargestRectangleInHistogram.h"

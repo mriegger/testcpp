@@ -122,5 +122,8 @@
     <ClInclude Include="LargestRectangleInHistogram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DivideIntegers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
