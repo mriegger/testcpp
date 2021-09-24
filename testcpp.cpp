@@ -36,6 +36,7 @@ import ReaderWriter;
 #include "SpaceshipOperator.h"
 #include "TopologicalSort.h"
 #include "DivideIntegers.h"
+#include "Sorting.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
 
@@ -280,17 +281,13 @@ float3x3 MatrixFromQuaternion(float4 quaternion)
     return m;
 }
 
+// SortedList
+// 
 
 int main()
 {
-    const float4 qrot90 = float4(0, 0, 0.70711, 0.70711);
-    float3x3 mat = MatrixFromQuaternion(qrot90);
-    mat = transpose(mat);
-    float3 z = mat[2];
-    float3 x = mat[0];
-    float3 y = mat[1];
 
- //6   float3 v = mul(v, mat);
+    Sorting::Test();
 
     return 0;
 };
