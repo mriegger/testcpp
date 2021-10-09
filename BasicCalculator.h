@@ -13,7 +13,7 @@ public:
     {
         m_iter = 0;
         m_s = s;
-        auto x = recurse();
+        auto x = dfs(s);
         return x;
     }
 
@@ -39,64 +39,70 @@ public:
 
 private:
 
-    int recurse()
+    static int PerformOp(int l, int r, char op)
+    {
+        switch (op)
+        {
+        case '+':
+            return l + r;
+        case '-':
+            return l - r;
+        case '*':
+            return l * r;
+        case '/':
+            return l / r;
+        }
+        return INT_MAX;
+    }
+
+    int dfs(const std::string& s)
     {
         int sum = 0;
-        int leftNum = 0;
-        int currNum = 0;
+        int lhs = 0;
+        int rhs = 0;
         char op = '+';
-        while (m_iter < m_s.size())
-        {         
-            const char ch = m_s[m_iter];
-            if (ch == ')')
+        while (m_iter < s.size())
+        {
+            char curr = s[m_iter++];
+            if (isdigit(curr))
             {
-                return sum + leftNum;
+                rhs *= 10;
+                rhs += curr - '0';
             }
-            else if (isdigit(ch) || ch == '(')
+            else if (curr == '(')
             {
-                if (ch == '(')
-                {
-                    m_iter++;
-                    currNum = recurse();
-                }
-                else
-                {
-                    currNum *= 10;
-                    currNum += ch - '0';
-                }
-
-                // peek at the next character to see if we are done parsing the current number
-                if (m_iter + 1 == (int)m_s.size() || !isdigit(m_s[m_iter + 1]))
-                {
-                    if (op == '*')
-                    {
-                        leftNum *= currNum;
-                    }
-                    else if (op == '/')
-                    {
-                        leftNum /= currNum;
-                    }
-                    else if (op == '+')
-                    {
-                        sum += leftNum;
-                        leftNum = currNum;
-                    }
-                    else // op == '-'
-                    {
-                        sum += leftNum;
-                        leftNum = -currNum;
-                    }
-                    currNum = 0;
-                }
+                rhs = dfs(s);
             }
-            else
+            else if (curr == ')')
             {
-                op = ch;
+                return sum + PerformOp(lhs, rhs, op);
             }
-            m_iter++;
+            else if (curr == '+')
+            {
+                sum += PerformOp(lhs, rhs, op);
+                op = '+';
+                lhs = rhs = 0;
+            }
+            else if (curr == '-')
+            {
+                sum += PerformOp(lhs, rhs, op);
+                op = '-';
+                lhs = rhs = 0;
+            }
+            else if (curr == '/')
+            {
+                lhs = PerformOp(lhs, rhs, op);
+                rhs = 0;
+                op = '/';
+            }
+            else // *
+            {
+                lhs = PerformOp(lhs, rhs, op);
+                rhs = 0;
+                op = '*';
+            }
         }
-        sum += leftNum;
-        return sum;
+        return sum + PerformOp(lhs, rhs, op);
     }
 
     std::string m_s;

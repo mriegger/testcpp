@@ -30,7 +30,7 @@ import ReaderWriter;
 #include "DivideIntegers.h"
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
-#include "Matrix4x4.h"
+#include "matrix4x4.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
 #include "SpaceshipOperator.h"
@@ -39,6 +39,7 @@ import ReaderWriter;
 #include "Sorting.h"
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
+#include "ShadowMapAtlas.h"
 
 using namespace std;
 
@@ -286,9 +287,8 @@ float3x3 MatrixFromQuaternion(float4 quaternion)
 
 int main()
 {
-
-    Sorting::Test();
-
+    BasicCalculator bc;
+    bc.Test();
     return 0;
 };
 

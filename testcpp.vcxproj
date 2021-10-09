@@ -162,6 +162,7 @@
     <ClCompile Include="ProducerConsumer.ixx" />
     <ClCompile Include="ReaderWriter.cpp" />
     <ClCompile Include="ReaderWriter.ixx" />
+    <ClCompile Include="ShadowmapAtlas.cpp" />
     <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="RandomNumberGenerator.h" />
+    <ClInclude Include="ShadowmapAtlas.h" />
     <ClInclude Include="Sorting.h" />
     <ClInclude Include="SpaceshipOperator.h" />
     <ClInclude Include="TextureSampling.h" />
