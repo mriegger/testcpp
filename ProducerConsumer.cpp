@@ -11,6 +11,8 @@ import ProducerConsumer;
 
 void ProducerConsumer::Run()
 {
+	auto thread_num = std::thread::hardware_concurrency();
+	std::cout << "There are " << thread_num << " threads available on this machine." << std::endl;
 	CreateThreads();
 	JoinThreads();
 }
