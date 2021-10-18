@@ -21,6 +21,10 @@ public:
     {
         BasicCalculator c;
         int result;
+
+        result = c.Calc("(((99)))");
+        assert(result == 99);
+
         result = c.Calc("2*3*4");
         assert(result == 24);
 
@@ -39,70 +43,86 @@ public:
 
 private:
 
-    static int PerformOp(int l, int r, char op)
+    static int UnwindStack(std::stack<int>& s)
     {
-        switch (op)
+        int res = 0;
+        while (!s.empty())
         {
-        case '+':
-            return l + r;
-        case '-':
-            return l - r;
-        case '*':
-            return l * r;
-        case '/':
-            return l / r;
+            res += s.top();
+            s.pop();
         }
-        return INT_MAX;
+        return res;
     }
 
     int dfs(const std::string& s)
     {
-        int sum = 0;
-        int lhs = 0;
-        int rhs = 0;
-        char op = '+';
+        std::stack<int> additionStack;
+        int lastOpSeen = '+';
+        int numBeingParsed = 0;
+
         while (m_iter < s.size())
         {
-            char curr = s[m_iter++];
-            if (isdigit(curr))
+            const char ch = s[m_iter];
+            if (isdigit(ch))
             {
-                rhs *= 10;
-                rhs += curr - '0';
+                numBeingParsed *= 10;
+                numBeingParsed += ch - '0';
+                // check for end of number
+                const bool numberEndsHere = m_iter + 1 >= s.size() || !isdigit(s[m_iter + 1]);
+                if (numberEndsHere)
+                {
+                    if (lastOpSeen == '-')
+                    {
+                        additionStack.push(-numBeingParsed);
+                    }
+                    else if (lastOpSeen == '+')
+                    {
+                        additionStack.push(numBeingParsed);
+                    }
+                    else if (lastOpSeen == '/')
+                    {
+                        additionStack.top() /= numBeingParsed;
+                    }
+                    else// if (lastOpSeen == '*')
+                    {
+                        additionStack.top() *= numBeingParsed;
+                    }
+                    numBeingParsed = 0;
+                }
             }
-            else if (curr == '(')
+            else if (ch == '(')
             {
-                rhs = dfs(s);
+                m_iter++; // move past the (
+                int result = dfs(s);
+                if (lastOpSeen == '-')
+                {
+                    additionStack.push(-result);
+                }
+                else if (lastOpSeen == '+')
+                {
+                    additionStack.push(result);
+                }
+                else if (lastOpSeen == '/')
+                {
+                    additionStack.top() /= result;
+                }
+                else// if (lastOpSeen == '*')
+                {
+                    additionStack.top() *= result;
+                }
             }
-            else if (curr == ')')
+            else if (ch == ')')
             {
-                return sum + PerformOp(lhs, rhs, op);
+                int result = UnwindStack(additionStack);
+                return result;
             }
-            else if (curr == '+')
+            else // operator
             {
-                sum += PerformOp(lhs, rhs, op);
-                op = '+';
-                lhs = rhs = 0;
+                lastOpSeen = ch;
             }
-            else if (curr == '-')
-            {
-                sum += PerformOp(lhs, rhs, op);
-                op = '-';
-                lhs = rhs = 0;
-            }
-            else if (curr == '/')
-            {
-                lhs = PerformOp(lhs, rhs, op);
-                rhs = 0;
-                op = '/';
-            }
-            else // *
-            {
-                lhs = PerformOp(lhs, rhs, op);
-                rhs = 0;
-                op = '*';
-            }
+            m_iter++; // move past the )
         }
-        return sum + PerformOp(lhs, rhs, op);
+        return UnwindStack(additionStack);
     }
 
     std::string m_s;
