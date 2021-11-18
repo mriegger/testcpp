@@ -31,6 +31,7 @@ import ReaderWriter;
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
 #include "matrix4x4.h"
+#include "BestMeetingPoint.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
 #include "SpaceshipOperator.h"
@@ -289,8 +290,9 @@ float3x3 MatrixFromQuaternion(float4 quaternion)
 
 int main()
 {
-    BasicCalculator bc;
-    bc.Test();
+    BestMeetingPoint mp;
+    mp.Test();
+
     return 0;
 };
 
