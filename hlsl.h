@@ -9,8 +9,7 @@ using half = FLOAT16;
 using uint = uint32_t;
 using dword = uint32_t;
 
-template<typename T>
-T clamp(T val, T minVal, T maxVal)
+inline float clamp(const float val, const float minVal, const float maxVal)
 {
     if (val <= minVal)
     {
