@@ -31,6 +31,7 @@ import ReaderWriter;
 #include "AsyncLinkedListTester.h"
 #include "LinearAlgebra.h"
 #include "matrix4x4.h"
+#include "UnionFind.h"
 #include "BestMeetingPoint.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
@@ -283,15 +284,19 @@ float3x3 MatrixFromQuaternion(float4 quaternion)
     return m;
 }
 
-// SortedList
-// 
+
 
 
 
 int main()
 {
-    BestMeetingPoint mp;
-    mp.Test();
+    UnionFind uf;
+    uf.Reset(5);
+    uf.Reset(4);
+    assert(uf.IsConnected(5, 4) == false);
+    uf.Connect(5, 4);
+    assert(uf.IsConnected(5, 4));
+
 
     return 0;
 };
