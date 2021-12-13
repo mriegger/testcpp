@@ -142,7 +142,7 @@ int MySqrt(unsigned long long xx)
         unsigned long long possXX = x * x;
         if (possXX == xx)
         {
-            return x;
+            return (int)x;
         }
         else if (possXX > xx)
         {
@@ -153,7 +153,7 @@ int MySqrt(unsigned long long xx)
             l = x + 1;
         }
     }
-    return r;
+    return (int)r;
 }
 
 double MySqrt(double x)
@@ -232,58 +232,6 @@ void testMySqrt()
 //        return result;
 //    }
 //};
-class Solution {
-public:
-    int calculate(string s)
-    {
-        int length = s.length();
-        if (length == 0) return 0;
-        int currentNumber = 0, lastNumber = 0, result = 0;
-        char sign = '+';
-        for (int i = 0; i < length; i++) {
-            char currentChar = s[i];
-            if (isdigit(currentChar)) {
-                currentNumber = (currentNumber * 10) + (currentChar - '0');
-            }
-            if (!isdigit(currentChar) && !iswspace(currentChar) || i == length - 1) {
-                if (sign == '+' || sign == '-') 
-                {
-                }
-                else if (sign == '*') 
-                {
-                }
-                else if (sign == '/') 
-                {
-
-                }
-            }
-        }
-        result += lastNumber;
-        return result;
-    }
-};
-
-float3x3 MatrixFromQuaternion(float4 quaternion)
-{
-    float tx = quaternion.x * 2.0f;
-    float ty = quaternion.y * 2.0f;
-    float tz = quaternion.z * 2.0f;
-    float twx = quaternion.w * tx;
-    float twy = quaternion.w * ty;
-    float twz = quaternion.w * tz;
-    float txy = quaternion.x * ty;
-    float txx = quaternion.x * tx;
-    float txz = quaternion.x * tz;
-    float tyy = quaternion.y * ty;
-    float tyz = quaternion.y * tz;
-    float tzz = quaternion.z * tz;
-
-    float3x3 m = float3x3(1.0f - tyy - tzz, txy - twz, txz + twy,
-        txy + twz, 1.0f - txx - tzz, tyz - twx,
-        txz - twy, tyz + twx, 1.0f - txx - tyy);
-    return m;
-}
-
 
 
 

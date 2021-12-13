@@ -984,8 +984,8 @@ inline float4x4 transpose(const float4x4& m)
 inline float3 exp(const float3 v)
 {
     float3 res;
-    res.x = exp(v.x);
-    res.y = exp(v.y);
-    res.z = exp(v.z);
+    res.x = expf(v.x);
+    res.y = expf(v.y);
+    res.z = expf(v.z);
     return res;
 }

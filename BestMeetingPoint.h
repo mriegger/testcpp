@@ -16,7 +16,7 @@ public:
     {
         using namespace std;
 
-        int total = 0, X = grid.size(), Y = grid[0].size();
+        int total = 0, X = (int)grid.size(), Y = (int)grid[0].size();
         for (int dim = 0; dim < 2; ++dim) {
             //int c[X * Y]
             std::vector<int> c(X*Y);
@@ -37,9 +37,9 @@ public:
     {
         using namespace std;
 
-        const int row = grid.size();
+        const int row = (int)grid.size();
         if (0 == row) return 0;
-        const int col = grid[0].size();
+        const int col = (int)grid[0].size();
         int total = 0;
         std::vector<int> posR, posC;
         for (int i = 0; i < row; ++i)

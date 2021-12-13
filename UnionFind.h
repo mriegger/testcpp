@@ -24,7 +24,12 @@ public:
 		if (m_parents[a] == a)
 			return a;
 		else
-			return GetParent(m_parents[a]);
+		{
+			int parent = GetParent(m_parents[a]);
+			// path compression! huge speed increase!
+			m_parents[a] = parent;
+			return parent;
+		}
 	}
 
 	void Reset(const int a)

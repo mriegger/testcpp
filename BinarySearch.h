@@ -11,8 +11,8 @@ public:
 	inline static std::vector<T>::const_iterator LowerBound(const std::vector<T>& v, const T target)
 	{
 		int left = 0;
-		int right = v.size() - 1;
-		int best = v.size();
+		int right = (int)v.size() - 1;
+		int best = (int)v.size();
 
 		while (left <= right)
 		{
@@ -35,8 +35,8 @@ public:
 	inline static std::vector<T>::const_iterator UpperBound(const std::vector<T>& v, const T target)
 	{
 		int left = 0;
-		int right = v.size() - 1;
-		int best = v.size();
+		int right = (int)v.size() - 1;
+		int best = (int)v.size();
 
 		while (left <= right)
 		{

@@ -10,7 +10,7 @@ public:
 
     static void MergeSort(std::vector<int>& v)
     {
-        MergeSort(v, 0, v.size() - 1);
+        MergeSort(v, 0, (int)v.size() - 1);
     }
 
     static void Test()
