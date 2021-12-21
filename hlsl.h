@@ -298,6 +298,22 @@ struct float4
     }
 };
 
+inline float length(const float4 v)
+{
+    return sqrtf(dot(v, v));
+}
+
+inline float4 normalize(const float4 v)
+{
+    const float l = length(v);
+    float4 r = v;
+    r.x /= l;
+    r.y /= l;
+    r.z /= l;
+    r.w /= l;
+    return r;
+}
+
 inline float saturate(float v)
 {
     if (v < 0) return 0;
