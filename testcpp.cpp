@@ -256,41 +256,14 @@ struct D : public B
 
 int main()
 {
-
     PPMCreator ppm;
-    vector<char> data(256 * 256 * 3);
-    for (auto& d : data)
-    {
-        d = 128;
-    }
-    ppm.Create("mkrhello.ppm", 256, 256, data);
-
-    //ofstream myFile;
-    //myFile.open("mkrdeleteme.ppm", ios::out | ios::binary);
-
-    //static constexpr string_view MagicNumber = "P6\n";
-    //myFile.write(MagicNumber.data(), MagicNumber.size());
-
-    //static constexpr string_view WidthHeight = "256 256\n";
-    //myFile.write(WidthHeight.data(), WidthHeight.size());
-
-    //static constexpr string_view MaxValue = "255\n";
-    //myFile.write(MaxValue.data(), MaxValue.size());
-    //int numLeftToWrite = 256 * 256;
-    //while (numLeftToWrite-- > 0)
-    //{
-    //    char black = 0;
-    //    char red = 255;
-    //    myFile.write(&red, sizeof(uint8_t));
-    //    myFile.write(&black, sizeof(uint8_t));
-    //    myFile.write(&black, sizeof(uint8_t));
-
-    //}
-
-
-    //myFile.close();
-
-
+    vector<char> data(256 * 256 * 3, 50);
+    ppm.SetImageData(data, 256);
+    ppm.SetPixel(0, 0, 255, 0, 0);
+    ppm.SetPixel(255, 255, 0, 255, 0);
+    ppm.SetPixel(0, 255, 0, 0, 255);
+    ppm.SetPixel(255, 0, 255, 0, 255);
+    ppm.Write("mkrhello.ppm");
     return 0;
 };
 
