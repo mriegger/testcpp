@@ -11,6 +11,7 @@ import ReaderWriter;
 #include <ranges>
 #include <concepts>
 #include <cassert>
+#include "Colors.h"
 #include <numeric>
 #include <map>
 #include <fstream>
@@ -263,6 +264,15 @@ int main()
     ppm.SetPixel(255, 255, 0, 255, 0);
     ppm.SetPixel(0, 255, 0, 0, 255);
     ppm.SetPixel(255, 0, 255, 0, 255);
+
+    for (int i = 0; i < 256; ++i)
+    {
+        for (int j = 0; j < 256; ++j)
+        {
+            ppm.SetPixel(i, j, Colors::Cyan);
+        }
+    }
+
     ppm.Write("mkrhello.ppm");
     return 0;
 };

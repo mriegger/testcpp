@@ -3,6 +3,7 @@
 #include <string_view>
 #include <vector>
 #include <span>
+#include "hlsl.h"
 
 class PPMCreator
 {
@@ -13,6 +14,7 @@ public:
 	
 	void SetImageData(const std::span<char> rgbData, const int width); 
 	void SetPixel(const int x, const int y, const uint8_t red, const uint8_t green, const uint8_t blue);
+	void SetPixel(const int x, const int y, const float3 color);
 	void Write(const std::string_view filename);
 
 private:

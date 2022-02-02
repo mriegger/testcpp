@@ -111,7 +111,7 @@ struct float3
 {
     float x, y, z;
     float3() = default;
-    float3(float a, float b, float c) :x(a), y(b), z(c)
+    constexpr float3(float a, float b, float c) :x(a), y(b), z(c)
     {
     }
     float3(float scalar)
