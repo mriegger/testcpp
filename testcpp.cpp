@@ -258,18 +258,47 @@ struct D : public B
 int main()
 {
     PPMCreator ppm;
-    vector<char> data(256 * 256 * 3, 50);
-    ppm.SetImageData(data, 256);
-    ppm.SetPixel(0, 0, 255, 0, 0);
-    ppm.SetPixel(255, 255, 0, 255, 0);
-    ppm.SetPixel(0, 255, 0, 0, 255);
-    ppm.SetPixel(255, 0, 255, 0, 255);
 
-    for (int i = 0; i < 256; ++i)
+    const std::vector<float3> allColors = {
+        Colors::Red,
+        Colors::Green,
+        Colors::Blue,
+        Colors::Black,
+        Colors::White,
+        Colors::Gray,
+        Colors::Maroon,
+        Colors::Navy,
+        Colors::Purple,
+        Colors::Teal,
+        Colors::Yellow,
+        Colors::Cyan,
+        Colors::Silver,
+        Colors::Brown,
+        Colors::RoyalBlue,
+        Colors::Pink
+    };
+
+    int numRowBlocks = 19;
+    int numColBlocks = 17;
+    int w = 4096;
+    int h = 4096;
+    int blockWidth = w / numRowBlocks;
+    int blockHeight = h / numColBlocks;
+    vector<char> data(w * h * 3, 50);
+    ppm.SetImageData(data, w);
+
+    for (int j = 0; j < h; ++j)
     {
-        for (int j = 0; j < 256; ++j)
+        for (int i = 0; i < w; ++i)
         {
-            ppm.SetPixel(i, j, Colors::Cyan);
+            int blockRow = j / blockHeight;
+            int blockCol = i / blockWidth;
+            int blockIndex = blockCol + blockRow * numColBlocks;
+
+            auto colorIndex = blockIndex % allColors.size();
+            float3 getColor = allColors[colorIndex];
+
+            ppm.SetPixel(i, j, getColor);
         }
     }
 
