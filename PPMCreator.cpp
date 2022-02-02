@@ -9,7 +9,7 @@ namespace
     static constexpr std::string_view MaxValue = "255\n";
     static constexpr int NumColorChannels = 3;
 
-    void WritePPMHeader(std::ofstream& f, const int width, const int height)
+    void WritePPMHeader(std::ofstream& f, const size_t width, const size_t height)
     {
         f.write(MagicNumber.data(), MagicNumber.size());
         const std::string widthHeightStr = std::to_string(width) + " " + std::to_string(height) + "\n";
@@ -18,35 +18,37 @@ namespace
     }
 }
 
-void PPMCreator::Create(const std::string_view filename, const int width, const int height, const std::span<char> rgbData)
+void PPMCreator::Create(const std::string_view filename, const int width, const std::span<uint8_t> rgbData)
 {
     using namespace std;
     ofstream f;
     f.open(filename.data(), ios::out | ios::binary);
+    const auto numPixels = rgbData.size();
+    const auto height = numPixels / NumColorChannels / width;
 
     WritePPMHeader(f, width, height);
 
-    f.write(rgbData.data(), rgbData.size());
+    f.write(reinterpret_cast<const char*>(rgbData.data()), rgbData.size());
     f.close();
 }
 
 void PPMCreator::SetImageData(const std::span<char> rgbData, const int width)
 { 
     m_width = width;
-    const int numPixels = rgbData.size();
+    const auto numPixels = rgbData.size();
     m_height = numPixels / NumColorChannels / m_width;
     m_imageData.resize(rgbData.size()); 
     std::copy(rgbData.begin(), rgbData.end(), m_imageData.begin()); 
 }
 
-void PPMCreator::SetPixel(const int x, const int y, const char red, const char green, const char blue)
+void PPMCreator::SetPixel(const int x, const int y, const uint8_t red, const uint8_t green, const uint8_t blue)
 {
     if (x < 0 || y < 0 || x >= m_width || y >= m_height)
     {
         std::cerr << "PPMCreator::SetPixel() called with out of bounds data" << std::endl;
         return;
     }
-    const int index = (x + y * m_width) * NumColorChannels;
+    const auto index = (x + y * m_width) * NumColorChannels;
     m_imageData[index+0] = red;
     m_imageData[index+1] = green;
     m_imageData[index+2] = blue;
