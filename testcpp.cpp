@@ -11,12 +11,15 @@ import ReaderWriter;
 #include <ranges>
 #include <concepts>
 #include <cassert>
+#include <numeric>
 #include <map>
+#include <fstream>
 #include <mutex>
 #include <set>
 #include <type_traits>
 #include <thread>
 #include <vector>
+#include <xmmintrin.h>
 #include "timer.h"
 #include <functional>
 #include <array>
@@ -33,6 +36,7 @@ import ReaderWriter;
 #include "matrix4x4.h"
 #include "UnionFind.h"
 #include "BestMeetingPoint.h"
+#include "PPMCreator.h"
 #include "Endianness.h"
 #include "BasicCalculator.h"
 #include "SpaceshipOperator.h"
@@ -199,51 +203,92 @@ void testMySqrt()
     }
     cout << "Done" << endl;
 }
-//
-//class Solution {
-//public:
-//    int calculate(string s)
-//    {
-//        int length = s.length();
-//        if (length == 0) return 0;
-//        int currentNumber = 0, lastNumber = 0, result = 0;
-//        char sign = '+';
-//        for (int i = 0; i < length; i++) {
-//            char currentChar = s[i];
-//            if (isdigit(currentChar)) {
-//                currentNumber = (currentNumber * 10) + (currentChar - '0');
-//            }
-//            if (!isdigit(currentChar) && !iswspace(currentChar) || i == length - 1) {
-//                if (sign == '+' || sign == '-') {
-//                    result += lastNumber;
-//                    lastNumber = (sign == '+') ? currentNumber : -currentNumber;
-//                }
-//                else if (sign == '*') {
-//                    lastNumber = lastNumber * currentNumber;
-//                }
-//                else if (sign == '/') {
-//                    lastNumber = lastNumber / currentNumber;
-//                }
-//                sign = currentChar;
-//                currentNumber = 0;
-//            }
-//        }
-//        result += lastNumber;
-//        return result;
-//    }
-//};
 
+struct XMMATRIX
+{
+    union
+    {
+        __m128 r[4];
+        struct
+        {
+            // row 0
+            float _11;
+            float _12;
+            float _13;
+            float _14;
+            // row 1
+            float _21;
+            float _22;
+            float _23;
+            float _24;
+            // row 2
+            float _31;
+            float _32;
+            float _33;
+            float _34;
+            // row 3
+            float _41;
+            float _42;
+            float _43;
+            float _44;
+        };
+        float    m[4][4];
+    };
+};
+struct B
+{
+    virtual void Dostuff()
+    {
+        cout << "B" << endl;
+    }
+};
+
+struct D : public B
+{
+    void Dostuff() override
+    {
+        cout << "D" << endl;
+
+    }
+};
 
 
 
 int main()
 {
-    UnionFind uf;
-    uf.Reset(5);
-    uf.Reset(4);
-    assert(uf.IsConnected(5, 4) == false);
-    uf.Connect(5, 4);
-    assert(uf.IsConnected(5, 4));
+
+    PPMCreator ppm;
+    vector<char> data(256 * 256 * 3);
+    for (auto& d : data)
+    {
+        d = 128;
+    }
+    ppm.Create("mkrhello.ppm", 256, 256, data);
+
+    //ofstream myFile;
+    //myFile.open("mkrdeleteme.ppm", ios::out | ios::binary);
+
+    //static constexpr string_view MagicNumber = "P6\n";
+    //myFile.write(MagicNumber.data(), MagicNumber.size());
+
+    //static constexpr string_view WidthHeight = "256 256\n";
+    //myFile.write(WidthHeight.data(), WidthHeight.size());
+
+    //static constexpr string_view MaxValue = "255\n";
+    //myFile.write(MaxValue.data(), MaxValue.size());
+    //int numLeftToWrite = 256 * 256;
+    //while (numLeftToWrite-- > 0)
+    //{
+    //    char black = 0;
+    //    char red = 255;
+    //    myFile.write(&red, sizeof(uint8_t));
+    //    myFile.write(&black, sizeof(uint8_t));
+    //    myFile.write(&black, sizeof(uint8_t));
+
+    //}
+
+
+    //myFile.close();
 
 
     return 0;

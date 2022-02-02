@@ -163,6 +163,7 @@
     <ClCompile Include="ReaderWriter.cpp" />
     <ClCompile Include="ReaderWriter.ixx" />
     <ClCompile Include="ShadowmapAtlas.cpp" />
+    <ClCompile Include="PPMCreator.cpp" />
     <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="IntersectionTests.h" />
     <ClInclude Include="LinearAlgebra.h" />
     <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="PPMCreator.h" />
     <ClInclude Include="RandomNumberGenerator.h" />
     <ClInclude Include="ShadowmapAtlas.h" />
     <ClInclude Include="Sorting.h" />
