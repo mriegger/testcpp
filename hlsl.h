@@ -820,6 +820,29 @@ inline float3 mul(const float3x3 mat, const float3 v)
     return res;
 }
 
+inline float3x3 mul(const float3x3 l, const float3x3 r)
+{
+    float3x3 res;
+
+    const float3 rcol0(r[0][0], r[1][0], r[2][0]);
+    const float3 rcol1(r[0][1], r[1][1], r[2][1]);
+    const float3 rcol2(r[0][2], r[1][2], r[2][2]);
+
+    res.m_rows[0][0] = dot(l.m_rows[0], rcol0);
+    res.m_rows[0][1] = dot(l.m_rows[0], rcol1);
+    res.m_rows[0][2] = dot(l.m_rows[0], rcol2);
+
+    res.m_rows[1][0] = dot(l.m_rows[1], rcol0);
+    res.m_rows[1][1] = dot(l.m_rows[1], rcol1);
+    res.m_rows[1][2] = dot(l.m_rows[1], rcol2);
+
+    res.m_rows[2][0] = dot(l.m_rows[2], rcol0);
+    res.m_rows[2][1] = dot(l.m_rows[2], rcol1);
+    res.m_rows[2][2] = dot(l.m_rows[2], rcol2);
+
+    return res;
+}
+
 inline float3 mul(const float3 v, const float3x3 mat)
 {
     float3 res;

@@ -265,11 +265,11 @@ int main()
 
     int numRowBlocks = 4;
     int numColBlocks = 4;
-    int w = 64;
-    int h = 64;
+    int w = 4096;
+    int h = 4096;
     int blockWidth = w / numRowBlocks;
     int blockHeight = h / numColBlocks;
-    vector<char> data(w * h * 3, 50);
+    vector<uint8_t> data(w * h * 3, 50);
     ppm.SetImageData(data, w);
   
 
@@ -287,7 +287,7 @@ int main()
             ppm.SetPixel(i, j, getColor);
         }
     }
-
+    ppm.Rotate(22.5);
 
     ppm.Write("mkrhello.ppm");
     return 0;

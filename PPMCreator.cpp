@@ -32,7 +32,7 @@ void PPMCreator::Create(const std::string_view filename, const int width, const 
     f.close();
 }
 
-void PPMCreator::SetImageData(const std::span<char> rgbData, const int width)
+void PPMCreator::SetImageData(const std::span<uint8_t> rgbData, const int width)
 { 
     m_width = width;
     const auto numPixels = rgbData.size();
@@ -100,4 +100,48 @@ void PPMCreator::Write(const std::string_view filename)
     f.write(reinterpret_cast<const char*>(m_imageData.data()), m_imageData.size());
 
     f.close();
+}
+
+void PPMCreator::Rotate(const float degrees)
+{
+    const float2 translateXY(m_width / 2.0f, m_height / 2.0f);
+    std::vector<uint8_t> dest(m_imageData.size(), 0);
+    
+    PPMCreator destPPM;
+    std::span<uint8_t> sp = dest;
+    destPPM.SetImageData(sp, m_width);
+
+    const float rad = degrees * 3.14159f / 180.0f;
+    const float3x3 invTranslate = { 1.0, 0.0f, -translateXY.x,
+        0.0f, 1.0f, -translateXY.y,
+        0,0,1 
+    };
+
+    const float3x3 rotate = {cos(rad), -sin(rad), 0.0f,
+        sin(rad), cos(rad), 0.0f,
+        0,0,1
+    };
+
+    const float3x3 translate = { 1.0, 0.0f, translateXY.x,
+        0.0f, 1.0f, translateXY.y,
+        0,0,1
+    };
+
+    float3x3 final = mul(rotate, invTranslate);
+    final = mul(translate, final);
+    for (int y = 0; y < m_height; ++y)
+    {
+        for (int x = 0; x < m_width; ++x)
+        {
+            float3 color = GetPixel(x, y);
+            float3 srcVertex(x, y, 1);
+            float3 destVertex = mul(final, srcVertex);
+            
+            if (destVertex.x >= 0 && destVertex.y >= 0 && destVertex.x < m_width && destVertex.y < m_height)
+            {
+                destPPM.SetPixel(destVertex.x, destVertex.y, color);
+            }
+        }
+    }
+    *this = destPPM;
 }
