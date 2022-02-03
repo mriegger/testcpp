@@ -259,24 +259,7 @@ int main()
 {
     PPMCreator ppm;
 
-    const std::vector<float3> allColors = {
-        Colors::Red,
-        Colors::Green,
-        Colors::Blue,
-        Colors::Black,
-        Colors::White,
-        Colors::Gray,
-        Colors::Maroon,
-        Colors::Navy,
-        Colors::Purple,
-        Colors::Teal,
-        Colors::Yellow,
-        Colors::Cyan,
-        Colors::Silver,
-        Colors::Brown,
-        Colors::RoyalBlue,
-        Colors::Pink
-    };
+    auto colVec = Colors::GetColorVector();
 
     int numRowBlocks = 19;
     int numColBlocks = 17;
@@ -295,8 +278,8 @@ int main()
             int blockCol = i / blockWidth;
             int blockIndex = blockCol + blockRow * numColBlocks;
 
-            auto colorIndex = blockIndex % allColors.size();
-            float3 getColor = allColors[colorIndex];
+            auto colorIndex = blockIndex % colVec.size();
+            float3 getColor = colVec[colorIndex];
 
             ppm.SetPixel(i, j, getColor);
         }
