@@ -14,6 +14,7 @@ import ReaderWriter;
 #include "Colors.h"
 #include <numeric>
 #include <map>
+#include <coroutine>
 #include <fstream>
 #include <mutex>
 #include <set>
@@ -253,11 +254,11 @@ struct D : public B
     }
 };
 
-
-
 int main()
 {
-  
+
+
+
     PPMCreator ppm;
 
     auto colVec = Colors::GetColorVector();

@@ -23,6 +23,6 @@ private:
 
     std::atomic<bool> m_goFlag = false;
 
-    std::vector<std::thread> m_threads;
+    std::vector<std::jthread> m_threads;
     AsyncLinkedList m_asyncLinkedList;
 };

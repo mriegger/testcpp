@@ -70,13 +70,13 @@ private:
 		m_threads.resize(NumPhilosophers);
 		for (int i = 0; i < NumPhilosophers; ++i)
 		{
-			m_threads[i] = std::thread(&DiningPhilosophers::ThreadFunc, this, i);
+			m_threads[i] = std::jthread(&DiningPhilosophers::ThreadFunc, this, i);
 		}
 	}
 
 	static const int NumPhilosophers = 5;
 	uint64_t m_numPlatesEaten = 0;
-	std::vector<std::thread> m_threads;
+	std::vector<std::jthread> m_threads;
 	std::vector<std::mutex > m_forkMutexes;
 	using ForkSemaphore = std::counting_semaphore<4>;
 	std::unique_ptr<ForkSemaphore> m_semaphore;

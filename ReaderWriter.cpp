@@ -65,12 +65,12 @@ void ReaderWriter::SpawnThreads()
 {
     for (int i = 0; i < NumReaderThreads; ++i)
     {
-        m_readerThreads.push_back(std::thread(&ReaderWriter::ReaderThread, this, i));
+        m_readerThreads.push_back(std::jthread(&ReaderWriter::ReaderThread, this, i));
     }
 
     for (int i = 0; i < NumWriterThreads; ++i)
     {
-        m_writerThreads.push_back(std::thread(&ReaderWriter::WriterThread, this, i));
+        m_writerThreads.push_back(std::jthread(&ReaderWriter::WriterThread, this, i));
     }
 }
 

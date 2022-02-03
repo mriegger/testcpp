@@ -40,7 +40,7 @@ void AsyncLinkedListTester::SpawnThreads()
 {
     for (int i = 0; i < NumThreads; ++i)
     {
-        m_threads.push_back(std::thread(&AsyncLinkedListTester::ThreadFunc, this, i));
+        m_threads.push_back(std::jthread(&AsyncLinkedListTester::ThreadFunc, this, i));
     }
 }
 

@@ -21,7 +21,7 @@ private:
     static const int NumReaderThreads = 2;
     static const int NumWriterThreads = 2;
 
-    std::vector<std::thread> m_readerThreads, m_writerThreads;
+    std::vector<std::jthread> m_readerThreads, m_writerThreads;
     std::vector<int> m_sharedData;
     std::condition_variable m_readPhase;
     std::condition_variable m_writePhase;
