@@ -1,6 +1,9 @@
 
 #include "AsyncLinkedList.h"
 
+//#define USE_COMPARE_AND_SWAP
+//#define USE_SPIN_LOCK
+
 AsyncLinkedList::AsyncLinkedList()
 {
 }
@@ -28,16 +31,18 @@ void AsyncLinkedList::Insert(const int value)
     }
 
 #else
-    //std::lock_guard<std::mutex> lck(m_mutex);
-
+#ifndef USE_SPIN_LOCK
+    std::lock_guard<std::mutex> lck(m_mutex);
+#else    
     m_spinlock.lock();
-
+#endif
     newNode->m_next.store(m_head);
     m_head = newNode;
 
+#ifdef USE_SPIN_LOCK
     m_spinlock.unlock();
-
-#endif
+#endif    
+#endif // CAS
 }
 
 void AsyncLinkedList::PrintLinkedList()

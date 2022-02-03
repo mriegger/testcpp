@@ -257,6 +257,11 @@ struct D : public B
 
 int main()
 {
+    AsyncLinkedListTester t;
+    t.Run();
+
+    return 0;
+
     PPMCreator ppm;
 
     auto colVec = Colors::GetColorVector();
