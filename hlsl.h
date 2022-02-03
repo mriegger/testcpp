@@ -219,7 +219,7 @@ struct float4
 {
     float x, y, z, w;
     float4() = default;
-    float4(float a, float b, float c, float d) :x(a), y(b), z(c), w(d)
+    constexpr float4(float a, float b, float c, float d) :x(a), y(b), z(c), w(d)
     {
     }
 
@@ -804,6 +804,43 @@ struct float4x4
 {
     std::array<float4, 4> m_rows;
 
+    float4x4() = default;
+    float4x4(const float a, const float b, const float c, const float d, 
+             const float e, const float f, const float g, const float h, 
+             const float i, const float j, const float k, const float l,
+            const float m, const float n, const float o, const float p)
+    {
+        m_rows[0][0] = a;
+        m_rows[0][1] = b;
+        m_rows[0][2] = c;
+        m_rows[0][3] = d;
+
+        m_rows[1][0] = e;
+        m_rows[1][1] = f;
+        m_rows[1][2] = g;
+        m_rows[1][3] = h;
+
+        m_rows[2][0] = i;
+        m_rows[2][1] = j;
+        m_rows[2][2] = k;
+        m_rows[2][3] = l;
+
+        m_rows[3][0] = m;
+        m_rows[3][1] = n;
+        m_rows[3][2] = o;
+        m_rows[3][3] = p;
+    }
+
+    float4& operator[](std::size_t idx)
+    {
+        return m_rows[idx];
+    }
+
+    const float4& operator[](std::size_t idx) const
+    {
+        return m_rows[idx];
+    }
+
     void SetRow(int row, float a, float b, float c, float d)
     {
         assert(row >= 0 && row < 4);
@@ -842,6 +879,40 @@ inline float3x3 mul(const float3x3 l, const float3x3 r)
 
     return res;
 }
+
+inline float4x4 mul(const float4x4 l, const float4x4 r)
+{
+    float4x4 res;
+
+    const float4 rcol0(r[0][0], r[1][0], r[2][0], r[3][0]);
+    const float4 rcol1(r[0][1], r[1][1], r[2][1], r[3][1]);
+    const float4 rcol2(r[0][2], r[1][2], r[2][2], r[3][2]);
+    const float4 rcol3(r[0][3], r[1][3], r[2][3], r[3][3]);
+
+    res.m_rows[0][0] = dot(l.m_rows[0], rcol0);
+    res.m_rows[0][1] = dot(l.m_rows[0], rcol1);
+    res.m_rows[0][2] = dot(l.m_rows[0], rcol2);
+    res.m_rows[0][3] = dot(l.m_rows[0], rcol3);
+
+    res.m_rows[1][0] = dot(l.m_rows[1], rcol0);
+    res.m_rows[1][1] = dot(l.m_rows[1], rcol1);
+    res.m_rows[1][2] = dot(l.m_rows[1], rcol2);
+    res.m_rows[1][3] = dot(l.m_rows[1], rcol3);
+
+    res.m_rows[2][0] = dot(l.m_rows[2], rcol0);
+    res.m_rows[2][1] = dot(l.m_rows[2], rcol1);
+    res.m_rows[2][2] = dot(l.m_rows[2], rcol2);
+    res.m_rows[2][3] = dot(l.m_rows[2], rcol3);
+
+    res.m_rows[3][0] = dot(l.m_rows[3], rcol0);
+    res.m_rows[3][1] = dot(l.m_rows[3], rcol1);
+    res.m_rows[3][2] = dot(l.m_rows[3], rcol2);
+    res.m_rows[3][3] = dot(l.m_rows[3], rcol3);
+
+
+    return res;
+}
+
 
 inline float3 mul(const float3 v, const float3x3 mat)
 {
