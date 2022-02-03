@@ -76,6 +76,21 @@ void PPMCreator::SetPixel(const int x, const int y, const float3 color)
     m_imageData[index + 2] = blue;
 }
 
+float3 PPMCreator::GetPixel(const int x, const int y) const
+{
+    if (x < 0 || y < 0 || x >= m_width || y >= m_height)
+    {
+        std::cerr << "PPMCreator::GetPixel() called with out of bounds data" << std::endl;
+        return float3(0,0,0);
+    }
+    const auto index = (x + y * m_width) * NumColorChannels;
+    const float red = m_imageData[index + 0];
+    const float green = m_imageData[index + 1];
+    const float blue = m_imageData[index + 2];
+    return float3(red, green, blue) / 255.0f;
+}
+
+
 void PPMCreator::Write(const std::string_view filename)
 {
     using namespace std;
