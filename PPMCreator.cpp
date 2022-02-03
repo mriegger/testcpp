@@ -41,6 +41,11 @@ void PPMCreator::SetImageData(const std::span<char> rgbData, const int width)
     std::copy(rgbData.begin(), rgbData.end(), m_imageData.begin()); 
 }
 
+std::vector<uint8_t> PPMCreator::GetImageData() const
+{
+    return m_imageData;
+}
+
 void PPMCreator::SetPixel(const int x, const int y, const uint8_t red, const uint8_t green, const uint8_t blue)
 {
     if (x < 0 || y < 0 || x >= m_width || y >= m_height)
@@ -77,7 +82,7 @@ void PPMCreator::Write(const std::string_view filename)
     ofstream f;
     f.open(filename.data(), ios::out | ios::binary);
     WritePPMHeader(f, m_width, m_height);
-    f.write(m_imageData.data(), m_imageData.size());
+    f.write(reinterpret_cast<const char*>(m_imageData.data()), m_imageData.size());
 
     f.close();
 }

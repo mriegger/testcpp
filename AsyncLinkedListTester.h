@@ -19,7 +19,7 @@ private:
     void TestResult();
 
     static constexpr int NumThreads = 8;
-    static constexpr int NumNumbersToInsert = 100000;
+    static constexpr int NumNumbersToInsert = 1000000;
 
     std::atomic<bool> m_goFlag = false;
 

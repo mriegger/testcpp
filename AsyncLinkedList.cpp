@@ -1,7 +1,7 @@
 
 #include "AsyncLinkedList.h"
 
-//#define USE_COMPARE_AND_SWAP
+#define USE_COMPARE_AND_SWAP
 //#define USE_SPIN_LOCK
 
 AsyncLinkedList::AsyncLinkedList()

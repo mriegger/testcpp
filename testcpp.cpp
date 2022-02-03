@@ -257,38 +257,36 @@ struct D : public B
 
 int main()
 {
-    AsyncLinkedListTester t;
-    t.Run();
-
-    return 0;
-
+  
     PPMCreator ppm;
 
     auto colVec = Colors::GetColorVector();
 
-    int numRowBlocks = 19;
-    int numColBlocks = 17;
-    int w = 4096;
-    int h = 4096;
+    int numRowBlocks = 4;
+    int numColBlocks = 4;
+    int w = 64;
+    int h = 64;
     int blockWidth = w / numRowBlocks;
     int blockHeight = h / numColBlocks;
     vector<char> data(w * h * 3, 50);
     ppm.SetImageData(data, w);
+  
 
     for (int j = 0; j < h; ++j)
     {
         for (int i = 0; i < w; ++i)
         {
-            int blockRow = j / blockHeight;
-            int blockCol = i / blockWidth;
-            int blockIndex = blockCol + blockRow * numColBlocks;
+            const int blockRow = j / blockHeight;
+            const int blockCol = i / blockWidth;
+            const int blockIndex = blockCol + blockRow * numColBlocks;
 
-            auto colorIndex = blockIndex % colVec.size();
-            float3 getColor = colVec[colorIndex];
+            const auto colorIndex = blockIndex % colVec.size();
+            const float3 getColor = colVec[colorIndex];
 
             ppm.SetPixel(i, j, getColor);
         }
     }
+
 
     ppm.Write("mkrhello.ppm");
     return 0;

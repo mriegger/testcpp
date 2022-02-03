@@ -5,6 +5,7 @@
 #include <span>
 #include "hlsl.h"
 
+// PPM is the simplest image format. A simple header followed by raw RGB data
 class PPMCreator
 {
 public:
@@ -16,10 +17,11 @@ public:
 	void SetPixel(const int x, const int y, const uint8_t red, const uint8_t green, const uint8_t blue);
 	void SetPixel(const int x, const int y, const float3 color);
 	void Write(const std::string_view filename);
+	std::vector<uint8_t> GetImageData() const;
 
 private:
 
-	std::vector<char> m_imageData;
+	std::vector<uint8_t> m_imageData;
 	size_t m_width = 128;
 	size_t m_height = 128;
 };
