@@ -111,7 +111,7 @@ void PPMCreator::Rotate(const float degrees)
     std::span<uint8_t> sp = dest;
     destPPM.SetImageData(sp, m_width);
 
-    const float rad = degrees * 3.14159f / 180.0f;
+    const float rad = radians(degrees);
     const float3x3 invTranslate = { 1.0, 0.0f, -translateXY.x,
         0.0f, 1.0f, -translateXY.y,
         0,0,1 

@@ -11,7 +11,6 @@ import ReaderWriter;
 #include <ranges>
 #include <concepts>
 #include <cassert>
-#include "Colors.h"
 #include <numeric>
 #include <map>
 #include <coroutine>
@@ -48,11 +47,10 @@ import ReaderWriter;
 #include "RandomNumberGenerator.h"
 #include "IntersectionTests.h"
 #include "ShadowMapAtlas.h"
+#include "Colors.h"
+#include "Math.h"
 
 using namespace std;
-
-
-#define DEG_TO_RAD 0.017453292519943295769236907684886f
 
 
 struct RayRayIntersectOutput
@@ -89,6 +87,10 @@ RayRayIntersectOutput RayRayIntersect(float3 o0, float3 o1, float3 r0, float3 r1
 int main()
 {
     IntersectionTests::Test();
+
+    const float3 a(1, 4, 0);
+    const float3 b(4, 2, 4);
+    auto res = Math::VectorProjection(a, b);
 
     //PPMCreator ppm;
 

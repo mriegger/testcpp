@@ -24,7 +24,7 @@ float3 IntersectionTests::RaySphere(const float3 rayStart, const float3 rayDirec
 
 float2 IntersectionTests::ClosestPointToLineSegment(const float2 c, const float2 a, const float2 b)
 {
-	auto ab = b - a;
+	const auto ab = b - a;
 	float t = dot(c - a, ab) / dot(ab, ab);
 	if (t < 0) t = 0;
 	if (t > 1) t = 1;

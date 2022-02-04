@@ -146,12 +146,12 @@ struct float3
     {
         assert(idx < 3);
         switch (idx)
-        {
+        {            
         case 0:
             return x;
         case 1:
             return y;
-        case 2:
+        default:
             return z;
         }
     }
@@ -165,7 +165,7 @@ struct float3
             return x;
         case 1:
             return y;
-        case 2:
+        default:
             return z;
         }
     }
@@ -866,7 +866,7 @@ inline float3 mul(const float3x3 mat, const float3 v)
 
 inline float3x3 mul(const float3x3 l, const float3x3 r)
 {
-    float3x3 res;
+    float3x3 res{};
 
     const float3 rcol0(r[0][0], r[1][0], r[2][0]);
     const float3 rcol1(r[0][1], r[1][1], r[2][1]);
@@ -889,7 +889,7 @@ inline float3x3 mul(const float3x3 l, const float3x3 r)
 
 inline float4x4 mul(const float4x4 l, const float4x4 r)
 {
-    float4x4 res;
+    float4x4 res{};
 
     const float4 rcol0(r[0][0], r[1][0], r[2][0], r[3][0]);
     const float4 rcol1(r[0][1], r[1][1], r[2][1], r[3][1]);
