@@ -22,6 +22,16 @@ float3 IntersectionTests::RaySphere(const float3 rayStart, const float3 rayDirec
 	return rayStart + rayDirection * t;
 }
 
+float2 IntersectionTests::ClosestPointToLineSegment(const float2 c, const float2 a, const float2 b)
+{
+	auto ab = b - a;
+	float t = dot(c - a, ab) / dot(ab, ab);
+	if (t < 0) t = 0;
+	if (t > 1) t = 1;
+	return a + t * ab;
+}
+
+
 bool IntersectionTests::DoesRayHitAABB(const float3 rayStart, const float3 rayDirection, const float3 aabbMin, const float3 aabbMax)
 {
 	// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
@@ -64,6 +74,7 @@ void IntersectionTests::Test()
 	TestRayPlane();
 	TestRaySphere();
 	TestRayAABB();
+	TestClosestPointToLineSegment();
 }
 
 void IntersectionTests::TestRayPlane()
@@ -98,4 +109,16 @@ void IntersectionTests::TestRayAABB()
 	assert(DoesRayHitAABB(float3(-20,0,0), float3(1,0,0), aabbMin, aabbMax));
 	assert(!DoesRayHitAABB(float3(-20, -11, 0), float3(1, 0, 0), aabbMin, aabbMax));
 	assert(!DoesRayHitAABB(float3(-15, -15, 0), normalize(float3(10, 1, 0)), aabbMin, aabbMax));
+}
+
+void IntersectionTests::TestClosestPointToLineSegment()
+{
+	const float2 a(-1, 0);
+	const float2 b(5, 0);
+	
+	const float2 c(0, 0.25f);
+
+	auto closetPt = ClosestPointToLineSegment(c, a, b);
+	assert(closetPt == float2(0, 0));
+
 }

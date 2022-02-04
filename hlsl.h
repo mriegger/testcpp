@@ -46,6 +46,8 @@ struct float2
     float2() = default;
     float2(float val) :x(val), y(val) {}
     float2(float x, float y) :x(x), y(y) {}
+    auto operator<=>(const float2& rhs) const = default;
+
     float x, y;
 
     float2 xy()const
@@ -198,6 +200,11 @@ inline float3 operator/(float3 v, float f)
     res.y /= f;
     res.z /= f;
     return res;
+}
+
+inline float length(const float2 v)
+{
+    return sqrtf(dot(v, v));
 }
 
 inline float length(const float3 v)
