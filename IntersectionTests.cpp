@@ -123,21 +123,30 @@ void IntersectionTests::TestRayTriangle()
 	tri.m_positions[1] = float3(0, 1, 100);
 	tri.m_positions[2] = float3(1, 0, 100);
 
-	const float shouldHit = RayTriangle(float3(0.1, 0.1, 0), float3(0, 0, 1), tri);
+	const float shouldHit = RayTriangle(float3(0.1f, 0.1, 0), float3(0, 0, 1), tri);
 	const float shouldMiss = RayTriangle(float3(1,1,0), float3(0,0,1), tri);
-	const float backwards = RayTriangle(float3(0.1, 0.1, 200), float3(0, 0, -1), tri);
+	const float backwards = RayTriangle(float3(0.1f, 0.1, 200), float3(0, 0, -1), tri);
 
 	float3 baryCenterHit;
 	RayTriangle(float3(1.0f / 3.0f, 1.0f / 3.0f, 0), float3(0, 0, 1), tri, &baryCenterHit);
 
+	float3 baryHitFirstVertex;
+	RayTriangle(float3(0.0000001f, 0.0000001f, 0), float3(0, 0, 1), tri, &baryHitFirstVertex);
+
+	float3 baryHitSecondVertex;
+	RayTriangle(float3(0.0000000, 0.99999999f, 0), float3(0, 0, 1), tri, &baryHitSecondVertex);
+
+
 	float3 baryHitThirdVertex;
-	RayTriangle(float3(0.99999999f, 0.0000001f, 0), float3(0, 0, 1), tri, &baryCenterHit);
+	RayTriangle(float3(0.99999999f, 0.0000001f, 0), float3(0, 0, 1), tri, &baryHitThirdVertex);
 
 	assert(shouldHit > 0);
 	assert(shouldMiss < 0);
 	assert(backwards > 0);
 
-	assert(Math::ApproxEqual(baryCenterHit, float3(0,0,1)));
+	assert(Math::ApproxEqual(baryHitFirstVertex, float3(1,0,0)));
+	assert(Math::ApproxEqual(baryHitSecondVertex, float3(0, 1, 0)));
+	assert(Math::ApproxEqual(baryHitThirdVertex, float3(0, 0, 1)));
 }
 
 void IntersectionTests::TestRayPlane()
