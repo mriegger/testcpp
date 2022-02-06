@@ -164,6 +164,7 @@
     <ClCompile Include="ReaderWriter.ixx" />
     <ClCompile Include="ShadowmapAtlas.cpp" />
     <ClCompile Include="PPMCreator.cpp" />
+    <ClCompile Include="SparseHashGrid.cpp" />
     <ClCompile Include="Spinlock.ixx" />
     <ClCompile Include="testcpp.cpp" />
     <ClCompile Include="TextureSampling.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ShadowmapAtlas.h" />
     <ClInclude Include="Sorting.h" />
     <ClInclude Include="SpaceshipOperator.h" />
+    <ClInclude Include="SparseHashGrid.h" />
     <ClInclude Include="TextureSampling.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopologicalSort.h" />
