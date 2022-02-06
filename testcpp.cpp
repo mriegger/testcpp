@@ -88,6 +88,7 @@ int main()
 {
     IntersectionTests::Test();
 
+    return 0;
     const float3 a(1, 4, 0);
     const float3 b(4, 2, 4);
     auto res = Math::VectorProjection(a, b);
